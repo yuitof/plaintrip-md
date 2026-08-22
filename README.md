@@ -19,7 +19,7 @@ npm test
 npm run build
 ```
 
-`npm run build` creates a ChatGPT Sites-compatible build. On Vercel, the same command automatically selects the native Next.js build. You can also run either target explicitly with `npm run build:sites` or `npm run build:next`.
+`npm run build` creates a ChatGPT Sites-compatible worker build. On Vercel, the same command automatically selects the native Next.js build. You can also run either target explicitly with `npm run build:sites` or `npm run build:next`. After a Sites build, `npm run start` serves that worker locally with Wrangler.
 
 ## Preview controls
 

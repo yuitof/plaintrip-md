@@ -1,3 +1,4 @@
+import { cloudflare } from "@cloudflare/vite-plugin";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import vinext from "vinext";
@@ -7,7 +8,15 @@ const workerSafeYaml = fileURLToPath(
 );
 
 export default defineConfig({
-  plugins: [vinext()],
+  plugins: [
+    vinext(),
+    cloudflare({
+      viteEnvironment: {
+        name: "rsc",
+        childEnvironments: ["ssr"],
+      },
+    }),
+  ],
   resolve: {
     // The Node entry is CommonJS and emits createRequire(import.meta.url), but
     // hosted worker runtimes do not guarantee that import.meta.url is present.
