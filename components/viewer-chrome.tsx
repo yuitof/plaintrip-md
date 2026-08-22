@@ -1,8 +1,9 @@
-import { ExternalLink, FileText, Info, PanelTop } from "lucide-react";
+import { ExternalLink, FileText, PanelTop } from "lucide-react";
 import { cookies } from "next/headers";
 import { SiGithub } from "react-icons/si";
 import ItineraryDocument from "@/components/itinerary-document";
 import LocalPreviewRefresh from "@/components/local-preview-refresh";
+import ViewerHeader from "@/components/viewer-header";
 import {
   CurrencyControl,
   TimezoneReadout,
@@ -18,8 +19,6 @@ import {
   normalizeTimezone,
   timezoneFromCookie,
 } from "@/lib/view-options";
-
-const VIEWER_REPOSITORY = "https://github.com/yuitof/plaintrip-md";
 
 type ViewerChromeProps = {
   source: string;
@@ -93,22 +92,7 @@ export default async function ViewerChrome({
       {localPreviewVersion === undefined ? null : (
         <LocalPreviewRefresh version={localPreviewVersion} />
       )}
-      <header className="viewer-header">
-        <a className="viewer-brand" href="/" aria-label="PlainTrip MD home">
-          <strong>PlainTrip</strong>
-          <span>MD</span>
-        </a>
-        <nav aria-label="Project links">
-          <a href={VIEWER_REPOSITORY} rel="noreferrer" target="_blank" title="PlainTrip MD on GitHub">
-            <SiGithub aria-hidden="true" size={18} />
-            <span className="sr-only">PlainTrip MD on GitHub</span>
-          </a>
-          <a href={`${VIEWER_REPOSITORY}#readme`} rel="noreferrer" target="_blank" title="About PlainTrip MD">
-            <Info aria-hidden="true" size={18} />
-            <span className="sr-only">About PlainTrip MD</span>
-          </a>
-        </nav>
-      </header>
+      <ViewerHeader />
 
       <div className="viewer-toolbar" aria-label="Preview controls" role="toolbar">
         <TimezoneReadout
