@@ -28,7 +28,7 @@ The surrounding toolbar follows TripMD Studio's preview layout without including
 - **TZ** is read-only. It uses the timezone declared in the Markdown; if the document has none, it falls back to the viewer's device timezone.
 - **Cur** changes the display currency and stores the choice in the shared URL as `?cur=JPY`. Converted prices are approximate and use USD-based rates cached for 12 hours.
 - **Source** opens the public itinerary repository.
-- **Share URL** uses the device share sheet or copies the current URL.
+- **Share URL** copies the current URL and confirms it with a bottom-right toast.
 
 The GitHub and information icons in the header link back to the PlainTrip MD project.
 

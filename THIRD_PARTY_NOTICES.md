@@ -10,3 +10,5 @@ Both packages are distributed under the MIT License and are Copyright (c) cumulo
 The upstream `@itinerary-md/editor` package and Studio application are marked `UNLICENSED`. PlainTrip MD does not redistribute their source code; its read-only React renderer and styles are independently implemented.
 
 The GitHub mark is rendered with `react-icons` (MIT) using the Simple Icons set (CC0 1.0 Universal).
+
+The currency popover uses Radix Select (MIT), and clipboard confirmations use `react-hot-toast` (MIT).

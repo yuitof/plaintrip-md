@@ -101,7 +101,7 @@ button, input, select {
   gap: 7px;
 }
 
-.timezone-readout, .currency-form {
+.timezone-readout {
   height: 27px;
   display: inline-flex;
   align-items: center;
@@ -114,7 +114,7 @@ button, input, select {
   white-space: nowrap;
 }
 
-.timezone-readout > span, .currency-form > span {
+.timezone-readout > span, .currency-label {
   color: #64748b;
 }
 
@@ -124,19 +124,83 @@ button, input, select {
   text-overflow: ellipsis;
 }
 
-.currency-form select {
-  height: 21px;
-  padding: 0;
+.currency-control {
+  height: 27px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.currency-trigger {
+  height: 27px;
+  min-width: 58px;
+  max-width: 140px;
+  padding: 3px 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
   color: #334155;
-  background-color: transparent;
-  border: 0;
-  outline: 0;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.currency-form:focus-within {
+.currency-trigger:hover { background: #f8fafc; }
+
+.currency-trigger:focus-visible {
   border-color: #60a5fa;
-  box-shadow: 0 0 0 2px #dbeafe;
+  outline: 2px solid #dbeafe;
+  outline-offset: 1px;
+}
+
+.currency-trigger-icon {
+  display: inline-flex;
+  color: #64748b;
+}
+
+.currency-menu {
+  z-index: 50;
+  max-height: 240px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+
+.currency-menu-viewport {
+  width: max-content;
+  min-width: var(--radix-select-trigger-width);
+  max-width: 90vw;
+  max-height: 240px;
+  padding: 4px;
+}
+
+.currency-menu-item {
+  position: relative;
+  min-width: 100%;
+  padding: 6px 26px 6px 8px;
+  display: flex;
+  align-items: center;
+  color: #1f2937;
+  border-radius: 4px;
+  font-size: .75rem;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+.currency-menu-item[data-highlighted] { background: #f3f4f6; }
+
+.currency-menu-check {
+  position: absolute;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .rate-status {
