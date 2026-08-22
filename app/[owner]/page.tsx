@@ -4,7 +4,7 @@ import ViewerChrome from "@/components/viewer-chrome";
 import { loadGitHubHome } from "@/lib/github-plan";
 import { parseItinerary } from "@/lib/itinerary";
 import {
-  timezoneFromSearchParams,
+  currencyFromSearchParams,
   type ViewerSearchParams,
 } from "@/lib/view-options";
 
@@ -38,7 +38,7 @@ export default async function GitHubHomePage({ params, searchParams }: PageProps
       source={result.source}
       sourceLabel={`${owner}/${result.repository}/${result.filePath}`}
       sourceRepositoryUrl={result.repositoryUrl}
-      timezoneOverride={timezoneFromSearchParams(query)}
+      currencyOverride={currencyFromSearchParams(query)}
     />
   );
 }

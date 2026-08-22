@@ -73,3 +73,37 @@ test("ordinary Markdown stays ordinary when TripMD mode is not declared", () => 
   const parsed = parseItinerary("# Notes\n\n> [09:00] train This remains a quote\n");
   assert.deepEqual(parsed.root.children.map((node) => node.type), ["heading", "blockquote"]);
 });
+
+test("the parser uses a supplied device timezone only when frontmatter omits one", () => {
+  const body = `
+## 2026-08-22
+
+> [09:00] meeting Breakfast
+`;
+  const deviceFallback = parseItinerary(`---
+type: tripmd
+title: Device fallback
+---${body}`, { defaultTimezone: "Europe/Lisbon" });
+  const documentTimezone = parseItinerary(`---
+type: tripmd
+title: Document timezone
+timezone: Asia/Tokyo
+---${body}`, { defaultTimezone: "Europe/Lisbon" });
+  const fallbackEvent = deviceFallback.root.children.find(
+    (node): node is ItineraryEventNode => node.type === "itmdEvent",
+  );
+  const documentEvent = documentTimezone.root.children.find(
+    (node): node is ItineraryEventNode => node.type === "itmdEvent",
+  );
+
+  assert.equal(deviceFallback.frontmatter.timezone, undefined);
+  assert.equal(
+    fallbackEvent?.time?.kind === "point" ? fallbackEvent.time.startISO : undefined,
+    "2026-08-22T09:00+01:00",
+  );
+  assert.equal(documentTimezone.frontmatter.timezone, "Asia/Tokyo");
+  assert.equal(
+    documentEvent?.time?.kind === "point" ? documentEvent.time.startISO : undefined,
+    "2026-08-22T09:00+09:00",
+  );
+});

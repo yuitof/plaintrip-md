@@ -155,12 +155,16 @@ function splitFrontmatter(source: string): {
   };
 }
 
-export function parseItinerary(source: string): ParsedItinerary {
+export function parseItinerary(
+  source: string,
+  options?: { defaultTimezone?: string },
+): ParsedItinerary {
   const parsed = splitFrontmatter(source);
   const rawType = stringValue(parsed.data.type)?.toLowerCase();
   const isItinerary =
     rawType === "tripmd" || rawType === "itmd" || rawType === "itinerary-md";
   const timezone = stringValue(parsed.data.timezone);
+  const parserTimezone = timezone ?? options?.defaultTimezone;
   const currency = stringValue(parsed.data.currency)?.toUpperCase() ?? "USD";
   const processor = unified().use(remarkParse).use(remarkGfm);
 
@@ -168,7 +172,7 @@ export function parseItinerary(source: string): ParsedItinerary {
     processor
       .use(remarkItineraryAlert)
       .use(remarkItinerary, {
-        defaultTimezone: timezone,
+        defaultTimezone: parserTimezone,
         defaultCurrency: currency,
       });
   }

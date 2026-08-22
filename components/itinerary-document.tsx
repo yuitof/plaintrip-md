@@ -58,6 +58,7 @@ import type {
   Table,
 } from "mdast";
 import { toString as mdastToString } from "mdast-util-to-string";
+import { convertCurrency, formatCurrency } from "@/lib/currency";
 import {
   type ItineraryAlertNode,
   type ItineraryEventNode,
@@ -69,9 +70,9 @@ import {
 } from "@/lib/itinerary";
 
 type RenderContext = {
-  currency: string;
+  displayCurrency: string;
+  exchangeRates?: Record<string, number>;
   timezone?: string;
-  timezoneOverride?: string;
 };
 
 const eventIcons: Record<string, LucideIcon> = {
@@ -252,61 +253,26 @@ function formatClockTime(
   return value.dayOffset ? `${clock} +${value.dayOffset}` : clock;
 }
 
-function dateInTimezone(iso: string, timezone: string): string | undefined {
-  try {
-    const parts = new Intl.DateTimeFormat("en-CA", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      timeZone: timezone,
-    }).formatToParts(new Date(iso));
-    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-    return values.year && values.month && values.day
-      ? `${values.year}-${values.month}-${values.day}`
-      : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-function formatTimeOverride(
-  iso: string | null | undefined,
-  timezone: string,
-  baseDate?: string,
-): string | undefined {
-  const time = formatTime(iso, timezone);
-  if (!time || !iso || !baseDate) return time;
-  const displayedDate = dateInTimezone(iso, timezone);
-  if (!displayedDate) return time;
-  const offset = Math.round(
-    (new Date(displayedDate).getTime() - new Date(baseDate).getTime()) /
-      86_400_000,
-  );
-  return offset ? `${time} ${offset > 0 ? "+" : ""}${offset}d` : time;
-}
-
 function eventTimes(event: ItineraryEventNode, context: RenderContext) {
   if (event.time?.kind === "marker") {
     return { start: event.time.marker.toUpperCase(), end: undefined };
   }
-  const override = context.timezoneOverride;
-  const baseDate = event.data?.itmdDate?.dateISO;
   if (event.time?.kind === "point") {
     return {
-      start: override
-        ? formatTimeOverride(event.time.startISO, override, baseDate)
-        : formatClockTime(event.time.start) ?? formatTime(event.time.startISO, context.timezone),
+      start:
+        formatClockTime(event.time.start) ??
+        formatTime(event.time.startISO, context.timezone),
       end: undefined,
     };
   }
   if (event.time?.kind === "range") {
     return {
-      start: override
-        ? formatTimeOverride(event.time.startISO, override, baseDate)
-        : formatClockTime(event.time.start) ?? formatTime(event.time.startISO, context.timezone),
-      end: override
-        ? formatTimeOverride(event.time.endISO, override, baseDate)
-        : formatClockTime(event.time.end) ?? formatTime(event.time.endISO, context.timezone),
+      start:
+        formatClockTime(event.time.start) ??
+        formatTime(event.time.startISO, context.timezone),
+      end:
+        formatClockTime(event.time.end) ??
+        formatTime(event.time.endISO, context.timezone),
     };
   }
   return { start: undefined, end: undefined };
@@ -320,25 +286,54 @@ function labelFor(key: string): string {
     .join(" ");
 }
 
-function evaluatedPriceLabel(
+function displayPriceLabel(
   priceInfo: ItineraryPriceInfo | undefined,
+  context: RenderContext,
 ): string | undefined {
-  if (!priceInfo?.raw.includes("{")) return undefined;
-  const totals = new Map<string, number>();
+  if (!priceInfo) return undefined;
+  const originals: Array<{ amount: number; currency: string }> = [];
   for (const token of priceInfo.price.tokens ?? []) {
     if (token.kind !== "money") continue;
     const currency = (token.normalized?.currency ?? token.currency)?.toUpperCase();
     const amount = Number(token.normalized?.amount ?? token.amount);
     if (!currency || !Number.isFinite(amount)) continue;
-    totals.set(currency, (totals.get(currency) ?? 0) + amount);
+    originals.push({ amount, currency });
   }
-  if (!totals.size) return undefined;
-  return [...totals.entries()]
-    .map(([currency, amount]) => formatMoney(amount, currency))
+  if (!originals.length) return undefined;
+  let convertedTotal = 0;
+  for (const original of originals) {
+    const converted = convertCurrency(
+      original.amount,
+      original.currency,
+      context.displayCurrency,
+      context.exchangeRates,
+    );
+    if (converted === undefined) {
+      return originals
+        .map(({ amount, currency }) => formatCurrency(amount, currency))
+        .join(" + ");
+    }
+    convertedTotal += converted;
+  }
+  const convertedLabel = formatCurrency(convertedTotal, context.displayCurrency);
+  if (originals.every(({ currency }) => currency === context.displayCurrency)) {
+    return convertedLabel;
+  }
+  const originalLabel = originals
+    .map(({ amount, currency }) => formatCurrency(amount, currency))
     .join(" + ");
+  return `${convertedLabel} (${originalLabel})`;
 }
 
-function EventBody({ event, accent }: { event: ItineraryEventNode; accent: string }) {
+function EventBody({
+  event,
+  accent,
+  context,
+}: {
+  event: ItineraryEventNode;
+  accent: string;
+  context: RenderContext;
+}) {
   if (!event.body?.length) return null;
   let priceIndex = 0;
   return (
@@ -357,13 +352,13 @@ function EventBody({ event, accent }: { event: ItineraryEventNode; accent: strin
                 const priceInfo = isPrice
                   ? event.data?.itmdPrice?.[priceIndex++]
                   : undefined;
-                const calculatedPrice = evaluatedPriceLabel(priceInfo);
+                const calculatedPrice = displayPriceLabel(priceInfo, context);
                 return (
                   <span className={isPrice ? "price" : undefined} key={`${entry.key}-${entryIndex}`}>
                     <Icon aria-hidden="true" size={14} />
                     {!isPrice ? <b>{labelFor(entry.key)}:</b> : null}
                     {calculatedPrice ? (
-                      <span title={`Calculated from ${priceInfo?.raw}`}>{calculatedPrice}</span>
+                      <span title={`Based on ${priceInfo?.raw}`}>{calculatedPrice}</span>
                     ) : renderInline(entry.value)}
                   </span>
                 );
@@ -401,7 +396,7 @@ function EventBlock({ event, context }: { event: ItineraryEventNode; context: Re
       <div className="event-track" aria-hidden="true" />
       <div className="event-content">
         <h3>{title ? renderInline(title) : labelFor(event.eventType)}</h3>
-        <EventBody accent={accent} event={event} />
+        <EventBody accent={accent} context={context} event={event} />
       </div>
       <div className="event-time event-time-end">{times.end}</div>
       <div className="event-dot" aria-hidden="true" />
@@ -521,20 +516,17 @@ function parseMoney(value: string | number | undefined, fallbackCurrency: string
   return Number.isFinite(amount) ? { amount, currency } : undefined;
 }
 
-function formatMoney(amount: number, currency: string) {
-  try {
-    return new Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency,
-      currencyDisplay: "narrowSymbol",
-      maximumFractionDigits: Number.isInteger(amount) ? 0 : 2,
-    }).format(amount);
-  } catch {
-    return `${amount} ${currency}`;
-  }
-}
-
-function Statistics({ nodes, frontmatter }: { nodes: ItineraryNode[]; frontmatter: ItineraryFrontmatter }) {
+function Statistics({
+  displayCurrency,
+  exchangeRates,
+  nodes,
+  frontmatter,
+}: {
+  displayCurrency: string;
+  exchangeRates?: Record<string, number>;
+  nodes: ItineraryNode[];
+  frontmatter: ItineraryFrontmatter;
+}) {
   const dates = nodes
     .filter((node): node is ItineraryHeadingNode => node.type === "itmdHeading")
     .map((node) => node.dateISO)
@@ -547,14 +539,33 @@ function Statistics({ nodes, frontmatter }: { nodes: ItineraryNode[]; frontmatte
         if (token.kind !== "money") continue;
         const currency = (token.normalized?.currency ?? token.currency)?.toUpperCase();
         const amount = Number(token.normalized?.amount ?? token.amount);
-        if (currency === frontmatter.currency && Number.isFinite(amount)) {
-          totals[event.baseType ?? "activity"] += amount;
+        if (currency && Number.isFinite(amount)) {
+          const converted = convertCurrency(
+            amount,
+            currency,
+            displayCurrency,
+            exchangeRates,
+          );
+          if (converted !== undefined) {
+            totals[event.baseType ?? "activity"] += converted;
+          }
         }
       }
     }
   }
   const total = totals.transportation + totals.activity + totals.stay;
-  const budget = parseMoney(frontmatter.budget, frontmatter.currency);
+  const sourceBudget = parseMoney(frontmatter.budget, frontmatter.currency);
+  const convertedBudget = sourceBudget
+    ? convertCurrency(
+        sourceBudget.amount,
+        sourceBudget.currency,
+        displayCurrency,
+        exchangeRates,
+      )
+    : undefined;
+  const budget = convertedBudget === undefined
+    ? undefined
+    : { amount: convertedBudget, currency: displayCurrency };
   const first = dates.at(0);
   const last = dates.at(-1);
   const days = first && last
@@ -564,14 +575,14 @@ function Statistics({ nodes, frontmatter }: { nodes: ItineraryNode[]; frontmatte
   return (
     <section className="statistics" aria-label="Itinerary statistics">
       <div className="money-summary">
-        <div className="money-total" data-budget={budget && budget.currency === frontmatter.currency ? (total <= budget.amount ? "under" : "over") : undefined}>
-          {total > 0 ? formatMoney(total, frontmatter.currency) : "—"}
-          {budget && budget.currency === frontmatter.currency ? <small>/ {formatMoney(budget.amount, budget.currency)}</small> : null}
+        <div className="money-total" data-budget={budget ? (total <= budget.amount ? "under" : "over") : undefined}>
+          {total > 0 ? formatCurrency(total, displayCurrency) : "—"}
+          {budget ? <small>/ {formatCurrency(budget.amount, budget.currency)}</small> : null}
         </div>
         <div className="money-breakdown">
-          <span><Plane size={20} />{totals.transportation ? formatMoney(totals.transportation, frontmatter.currency) : "—"}</span>
-          <span><FerrisWheel size={20} />{totals.activity ? formatMoney(totals.activity, frontmatter.currency) : "—"}</span>
-          <span><BedDouble size={20} />{totals.stay ? formatMoney(totals.stay, frontmatter.currency) : "—"}</span>
+          <span><Plane size={20} />{totals.transportation ? formatCurrency(totals.transportation, displayCurrency) : "—"}</span>
+          <span><FerrisWheel size={20} />{totals.activity ? formatCurrency(totals.activity, displayCurrency) : "—"}</span>
+          <span><BedDouble size={20} />{totals.stay ? formatCurrency(totals.stay, displayCurrency) : "—"}</span>
         </div>
       </div>
       <div className="date-summary">
@@ -590,17 +601,19 @@ function tagColor(tag: string): CSSProperties {
 }
 
 export default function ItineraryDocument({
+  displayCurrency,
+  exchangeRates,
   itinerary,
-  timezoneOverride,
 }: {
+  displayCurrency: string;
+  exchangeRates?: Record<string, number>;
   itinerary: ParsedItinerary;
-  timezoneOverride?: string;
 }) {
   const { frontmatter, root } = itinerary;
   const context = {
-    currency: frontmatter.currency,
-    timezone: timezoneOverride || frontmatter.timezone,
-    timezoneOverride,
+    displayCurrency,
+    exchangeRates,
+    timezone: frontmatter.timezone,
   };
 
   return (
@@ -613,7 +626,14 @@ export default function ItineraryDocument({
             {frontmatter.tags.map((tag) => <li key={tag} style={tagColor(tag)}>{tag}</li>)}
           </ul>
         ) : null}
-        {frontmatter.type === "tripmd" || frontmatter.type === "itmd" || frontmatter.type === "itinerary-md" ? <Statistics frontmatter={frontmatter} nodes={root.children} /> : null}
+        {frontmatter.type === "tripmd" || frontmatter.type === "itmd" || frontmatter.type === "itinerary-md" ? (
+          <Statistics
+            displayCurrency={displayCurrency}
+            exchangeRates={exchangeRates}
+            frontmatter={frontmatter}
+            nodes={root.children}
+          />
+        ) : null}
         <div className="document-body">
           {root.children.map((node, index) => renderBlock(node, index, context))}
         </div>

@@ -5,7 +5,7 @@ import ViewerChrome from "@/components/viewer-chrome";
 import { loadGitHubTrip } from "@/lib/github-plan";
 import { parseItinerary } from "@/lib/itinerary";
 import {
-  timezoneFromSearchParams,
+  currencyFromSearchParams,
   type ViewerSearchParams,
 } from "@/lib/view-options";
 
@@ -44,7 +44,7 @@ export default async function Home({
       source={source}
       sourceLabel="yuitof/plaintrip-md-template/plaintrip.md"
       sourceRepositoryUrl="https://github.com/yuitof/plaintrip-md-template"
-      timezoneOverride={timezoneFromSearchParams(query)}
+      currencyOverride={currencyFromSearchParams(query)}
     />
   );
 }

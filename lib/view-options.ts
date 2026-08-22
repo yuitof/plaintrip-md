@@ -1,3 +1,7 @@
+import { normalizeCurrency } from "./currency.ts";
+
+export const DEVICE_TIMEZONE_COOKIE = "plaintrip-device-timezone";
+
 export type ViewerSearchParams = Record<
   string,
   string | string[] | undefined
@@ -16,9 +20,18 @@ export function normalizeTimezone(value: unknown): string | undefined {
   }
 }
 
-export function timezoneFromSearchParams(
+export function timezoneFromCookie(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  try {
+    return normalizeTimezone(decodeURIComponent(value));
+  } catch {
+    return undefined;
+  }
+}
+
+export function currencyFromSearchParams(
   searchParams: ViewerSearchParams,
 ): string | undefined {
-  const value = searchParams.tz;
-  return normalizeTimezone(Array.isArray(value) ? value[0] : value);
+  const value = searchParams.cur;
+  return normalizeCurrency(Array.isArray(value) ? value[0] : value);
 }

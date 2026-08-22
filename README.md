@@ -25,11 +25,10 @@ npm run build
 
 The surrounding toolbar follows TripMD Studio's preview layout without including its editor:
 
-- **TZ** applies an IANA timezone override and stores it in the shared URL as `?tz=Area/City`.
-- **Device TZ** switches the preview to the browser's timezone.
-- **Cur** shows the itinerary's declared currency; PlainTrip MD does not pretend to provide live exchange rates.
+- **TZ** is read-only. It uses the timezone declared in the Markdown; if the document has none, it falls back to the viewer's device timezone.
+- **Cur** changes the display currency and stores the choice in the shared URL as `?cur=JPY`. Converted prices are approximate and use USD-based rates cached for 12 hours.
 - **Source** opens the public itinerary repository.
-- **Copy Markdown** copies the source document, while **Share URL** uses the device share sheet or copies the current URL.
+- **Share URL** uses the device share sheet or copies the current URL.
 
 The GitHub and information icons in the header link back to the PlainTrip MD project.
 
@@ -81,7 +80,7 @@ Use `## YYYY-MM-DD` for date headings. Add `@Area/City` when a day uses a differ
 - Common event types such as `flight`, `train`, `ferry`, `hotel`, `meeting`, `shopping`, and `sightseeing` receive matching timeline icons.
 - `:: Place` is a single location; `:: From - To` is a journey.
 - Indented blockquote list items add metadata such as `price`, `status`, `seat`, `duration`, and `details`.
-- Price values can use arithmetic such as `{25*4} USD`. PlainTrip MD displays the calculated amount while evaluating numbers and arithmetic operators only—never variables or functions.
+- Price values can use arithmetic such as `{25*4} USD`. PlainTrip MD displays the calculated amount (and converts it when a different display currency is selected) while evaluating numbers and arithmetic operators only—never variables or functions.
 - Normal Markdown, GFM tables, task lists, links, and `[!NOTE]`-style alerts remain available around the itinerary.
 
 See the complete [`plaintrip.md`](https://github.com/yuitof/plaintrip-md-template/blob/main/plaintrip.md) example and the upstream [TripMD syntax reference](https://github.com/cumuloworks/itinerary-md#syntax).
@@ -145,6 +144,8 @@ routes:
 This maps `/octocat` to `octocat/lisbon-weekend/plaintrip.md`. Owner-home targets stay inside the same GitHub account.
 
 This is routing, not access control. Every source file remains readable in its public GitHub repository. Never commit passport numbers, booking codes, home addresses, API keys, or other secrets. Private repositories are not supported yet.
+
+Currency conversion is for rough planning only. Exchange rates and card-provider fees can differ, so verify important totals before booking.
 
 ## Deploy the viewer
 

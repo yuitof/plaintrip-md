@@ -1,104 +1,79 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Check, Clipboard, RotateCcw, Share2 } from "lucide-react";
+import { Share2 } from "lucide-react";
+import { COMMON_CURRENCIES } from "@/lib/currency";
+import { DEVICE_TIMEZONE_COOKIE } from "@/lib/view-options";
 
-const fallbackTimezones = [
-  "UTC",
-  "America/Los_Angeles",
-  "America/New_York",
-  "Europe/Lisbon",
-  "Europe/London",
-  "Europe/Paris",
-  "Asia/Shanghai",
-  "Asia/Tokyo",
-  "Australia/Sydney",
-];
-
-function availableTimezones(): string[] {
-  try {
-    const supported = Intl.supportedValuesOf("timeZone");
-    return ["UTC", ...supported.filter((timezone) => timezone !== "UTC")];
-  } catch {
-    return fallbackTimezones;
-  }
-}
-
-export function TimezoneControl({ initialTimezone }: { initialTimezone: string }) {
+export function TimezoneReadout({
+  detectDevice,
+  timezone,
+}: {
+  detectDevice: boolean;
+  timezone: string;
+}) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [value, setValue] = useState(initialTimezone);
-  const options = useMemo(availableTimezones, []);
+  const [label, setLabel] = useState(timezone);
 
-  function apply(timezone: string) {
-    try {
-      new Intl.DateTimeFormat("en", { timeZone: timezone }).format();
-    } catch {
+  useEffect(() => {
+    if (!detectDevice) {
+      setLabel(timezone);
       return;
     }
-    const next = new URLSearchParams(searchParams.toString());
-    next.set("tz", timezone);
-    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
-  }
-
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    apply(value.trim());
-  }
-
-  function useDeviceTimezone() {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-    setValue(timezone);
-    apply(timezone);
-  }
+    const deviceTimezone =
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    setLabel(deviceTimezone);
+    if (deviceTimezone === timezone) return;
+    document.cookie = `${DEVICE_TIMEZONE_COOKIE}=${encodeURIComponent(deviceTimezone)}; Path=/; Max-Age=31536000; SameSite=Lax`;
+    router.refresh();
+  }, [detectDevice, router, timezone]);
 
   return (
-    <div className="timezone-tools">
-      <form className="timezone-form" onSubmit={submit}>
-        <label htmlFor="viewer-timezone">TZ</label>
-        <input
-          aria-label="Display timezone"
-          id="viewer-timezone"
-          list="viewer-timezones"
-          onChange={(event) => setValue(event.target.value)}
-          spellCheck={false}
-          value={value}
-        />
-        <datalist id="viewer-timezones">
-          {options.map((timezone) => <option key={timezone} value={timezone} />)}
-        </datalist>
-        <button aria-label="Apply timezone" title="Apply timezone" type="submit">
-          <Check aria-hidden="true" size={14} />
-        </button>
-      </form>
-      <button
-        className="toolbar-button device-timezone"
-        onClick={useDeviceTimezone}
-        title="Use device timezone"
-        type="button"
-      >
-        <RotateCcw aria-hidden="true" size={14} />
-        <span>Device TZ</span>
-      </button>
+    <div
+      className="timezone-readout"
+      title={detectDevice ? "Device timezone" : "Timezone declared by this itinerary"}
+    >
+      <span>TZ</span>
+      <output>{label}</output>
     </div>
   );
 }
 
-export function ViewerActions({ source }: { source: string }) {
-  const [copyLabel, setCopyLabel] = useState("Copy Markdown");
-  const [shareLabel, setShareLabel] = useState("Share URL");
+export function CurrencyControl({ initialCurrency }: { initialCurrency: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currencies = COMMON_CURRENCIES.includes(
+    initialCurrency as (typeof COMMON_CURRENCIES)[number],
+  )
+    ? COMMON_CURRENCIES
+    : [initialCurrency, ...COMMON_CURRENCIES];
 
-  async function copyMarkdown() {
-    try {
-      await navigator.clipboard.writeText(source);
-      setCopyLabel("Copied");
-      window.setTimeout(() => setCopyLabel("Copy Markdown"), 1600);
-    } catch {
-      setCopyLabel("Copy failed");
-    }
+  function selectCurrency(currency: string) {
+    const next = new URLSearchParams(searchParams.toString());
+    next.set("cur", currency);
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
   }
+
+  return (
+    <label className="currency-form">
+      <span>Cur</span>
+      <select
+        aria-label="Display currency"
+        onChange={(event) => selectCurrency(event.target.value)}
+        value={initialCurrency}
+      >
+        {currencies.map((currency) => (
+          <option key={currency} value={currency}>{currency}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+export function ViewerActions() {
+  const [shareLabel, setShareLabel] = useState("Share URL");
 
   async function shareUrl() {
     try {
@@ -117,10 +92,6 @@ export function ViewerActions({ source }: { source: string }) {
 
   return (
     <div className="viewer-actions">
-      <button className="toolbar-button" onClick={copyMarkdown} type="button">
-        <Clipboard aria-hidden="true" size={14} />
-        <span>{copyLabel}</span>
-      </button>
       <button className="toolbar-button share-button" onClick={shareUrl} type="button">
         <Share2 aria-hidden="true" size={14} />
         <span>{shareLabel}</span>

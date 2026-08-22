@@ -20,11 +20,11 @@ code, pre, .event-time {
   font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-button, input, output {
+button, input, output, select {
   font: inherit;
 }
 
-button, input {
+button, input, select {
   color: inherit;
 }
 
@@ -95,52 +95,63 @@ button, input {
   font-size: .75rem;
 }
 
-.timezone-tools, .timezone-form, .viewer-actions {
+.viewer-actions {
   display: flex;
   align-items: center;
   gap: 7px;
 }
 
-.timezone-form label, .currency-readout > span {
-  color: #64748b;
-}
-
-.timezone-form input {
-  width: clamp(160px, 20vw, 265px);
+.timezone-readout, .currency-form {
   height: 27px;
-  padding: 3px 30px 3px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 7px;
+  color: #334155;
   background: #fff;
   border: 1px solid #cbd5e1;
   border-radius: 6px;
-  outline: none;
+  white-space: nowrap;
 }
 
-.timezone-form input:focus {
+.timezone-readout > span, .currency-form > span {
+  color: #64748b;
+}
+
+.timezone-readout output {
+  max-width: min(25vw, 220px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.currency-form select {
+  height: 21px;
+  padding: 0;
+  color: #334155;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+}
+
+.currency-form:focus-within {
   border-color: #60a5fa;
   box-shadow: 0 0 0 2px #dbeafe;
 }
 
-.timezone-form { position: relative; }
-
-.timezone-form > button {
-  position: absolute;
-  right: 2px;
-  bottom: 2px;
-  width: 24px;
-  height: 23px;
-  padding: 0;
+.rate-status {
+  min-height: 27px;
+  padding: 0 2px;
   display: grid;
   place-items: center;
   color: #64748b;
-  background: transparent;
-  border: 0;
-  border-radius: 4px;
-  cursor: pointer;
+  font-size: .68rem;
+  white-space: nowrap;
 }
 
-.timezone-form > button:hover { background: #f1f5f9; }
+.rate-status[data-ready="false"] { color: #b45309; }
 
-.toolbar-button, .currency-readout, .preview-mode {
+.toolbar-button, .preview-mode {
   height: 27px;
   display: inline-flex;
   align-items: center;
@@ -157,13 +168,6 @@ button, input {
 
 button.toolbar-button { cursor: pointer; }
 .toolbar-button:hover { background: #f8fafc; }
-
-.currency-readout {
-  gap: 7px;
-  padding-left: 4px;
-}
-
-.currency-readout output { min-width: 2rem; }
 
 .preview-mode {
   width: 30px;
@@ -608,9 +612,7 @@ button.toolbar-button { cursor: pointer; }
   .viewer-header { min-height: 36px; padding: 0 4px; }
   .viewer-brand { font-size: 1.8rem; }
   .viewer-toolbar { flex-wrap: wrap; }
-  .timezone-tools { width: 100%; }
-  .timezone-form { min-width: 0; flex: 1; }
-  .timezone-form input { width: 100%; }
+  .timezone-readout output { max-width: 42vw; }
   .toolbar-spacer { display: none; }
   .source-button { max-width: 40px; }
   .source-button span, .source-button svg:last-child { display: none; }
