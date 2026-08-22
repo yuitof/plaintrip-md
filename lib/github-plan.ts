@@ -106,7 +106,7 @@ async function readText(url: string): Promise<Response | null> {
   try {
     return await fetch(url, {
       headers: { Accept: "text/plain" },
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
   } catch {
     return null;

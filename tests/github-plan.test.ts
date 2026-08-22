@@ -60,7 +60,11 @@ function responseFor(url: string): Response {
 
 test("explicit GitHub routes, owner homes, aliases, and branches", async () => {
   const originalFetch = globalThis.fetch;
-  globalThis.fetch = async (input) => responseFor(String(input));
+  const requestOptions: RequestInit[] = [];
+  globalThis.fetch = async (input, init) => {
+    requestOptions.push(init ?? {});
+    return responseFor(String(input));
+  };
 
   try {
     const root = await loadGitHubTrip("someone", "a-trip");
@@ -100,6 +104,12 @@ test("explicit GitHub routes, owner homes, aliases, and branches", async () => {
     }
 
     assert.deepEqual(await loadGitHubTrip("not/valid", "a-trip"), { status: "invalid" });
+
+    assert.ok(requestOptions.length > 0);
+    assert.ok(
+      requestOptions.every((options) => options.cache === "no-store"),
+      "GitHub source reads must not reuse stale template content",
+    );
 
     globalThis.fetch = async () => {
       throw new Error("offline");
