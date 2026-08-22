@@ -1,13 +1,29 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import ItineraryDocument from "@/components/itinerary-document";
-import { getSampleItinerarySource } from "@/lib/itinerary";
+import { loadGitHubTrip } from "@/lib/github-plan";
+import { getSampleItinerarySource, parseItinerary } from "@/lib/itinerary";
 
-export const dynamic = "force-static";
-export const metadata: Metadata = {
-  title: "China trip · 2026",
-  description: "A sample shared itinerary rendered from Markdown.",
-};
+export const dynamic = "force-dynamic";
 
-export default function Home() {
-  return <ItineraryDocument source={getSampleItinerarySource()} />;
+const TEMPLATE_OWNER = "yuitof";
+const TEMPLATE_REPOSITORY = "plaintrip-md-template";
+
+const loadTemplateSource = cache(async () => {
+  const result = await loadGitHubTrip(TEMPLATE_OWNER, TEMPLATE_REPOSITORY);
+  return result.status === "ok" ? result.source : getSampleItinerarySource();
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const itinerary = parseItinerary(await loadTemplateSource());
+  return {
+    title: itinerary.frontmatter.title,
+    description:
+      itinerary.frontmatter.description ||
+      "The PlainTrip MD itinerary template.",
+  };
+}
+
+export default async function Home() {
+  return <ItineraryDocument source={await loadTemplateSource()} />;
 }

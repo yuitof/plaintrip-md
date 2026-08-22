@@ -2,7 +2,7 @@
 
 PlainTrip MD is a quiet, read-only viewer for [TripMD / itinerary-md](https://github.com/cumuloworks/itinerary-md) Markdown. It uses the same open-source itinerary parser and alert parser as TripMD, then presents the result as a shareable preview without an editor, account, or itinerary database.
 
-The root page renders [`sample-travel-plan.md`](./sample-travel-plan.md), so the website works before you rename or configure anything.
+The root page loads the `/` route from [`yuitof/plaintrip-md-template`](https://github.com/yuitof/plaintrip-md-template), the public template repository users can clone. The bundled [`sample-travel-plan.md`](./sample-travel-plan.md) is the development example and an outage fallback.
 
 ## Run it locally
 
@@ -155,7 +155,7 @@ Editing an itinerary repository does not require redeploying PlainTrip MD. See V
 
 ## Make an itinerary template
 
-Start a second repository containing only:
+The ready-to-clone [`yuitof/plaintrip-md-template`](https://github.com/yuitof/plaintrip-md-template) contains only:
 
 ```text
 route.yaml
