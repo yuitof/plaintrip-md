@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { cache } from "react";
 import ItineraryDocument from "@/components/itinerary-document";
 import { loadGitHubTrip } from "@/lib/github-plan";
-import { getSampleItinerarySource, parseItinerary } from "@/lib/itinerary";
+import { parseItinerary } from "@/lib/itinerary";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,8 @@ const TEMPLATE_REPOSITORY = "plaintrip-md-template";
 
 const loadTemplateSource = cache(async () => {
   const result = await loadGitHubTrip(TEMPLATE_OWNER, TEMPLATE_REPOSITORY);
-  return result.status === "ok" ? result.source : getSampleItinerarySource();
+  if (result.status !== "ok") notFound();
+  return result.source;
 });
 
 export async function generateMetadata(): Promise<Metadata> {

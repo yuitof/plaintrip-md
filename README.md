@@ -2,7 +2,7 @@
 
 PlainTrip MD is a quiet, read-only viewer for [TripMD / itinerary-md](https://github.com/cumuloworks/itinerary-md) Markdown. It uses the same open-source itinerary parser and alert parser as TripMD, then presents the result as a shareable preview without an editor, account, or itinerary database.
 
-The root page loads the `/` route from [`yuitof/plaintrip-md-template`](https://github.com/yuitof/plaintrip-md-template), the public template repository users can clone. The bundled [`sample-travel-plan.md`](./sample-travel-plan.md) is the development example and an outage fallback.
+The root page loads the `/` route from [`yuitof/plaintrip-md-template`](https://github.com/yuitof/plaintrip-md-template), the public template repository users can clone. The template keeps its default itinerary in `plaintrip.md`.
 
 ## Run it locally
 
@@ -72,7 +72,7 @@ Use `## YYYY-MM-DD` for date headings. Add `@Area/City` when a day uses a differ
 - Price values can use arithmetic such as `{25*4} USD`. PlainTrip MD evaluates arithmetic only—never variables or functions.
 - Normal Markdown, GFM tables, task lists, links, and `[!NOTE]`-style alerts remain available around the itinerary.
 
-See the complete [`sample-travel-plan.md`](./sample-travel-plan.md) and the upstream [TripMD syntax reference](https://github.com/cumuloworks/itinerary-md#syntax).
+See the complete [`plaintrip.md`](https://github.com/yuitof/plaintrip-md-template/blob/main/plaintrip.md) example and the upstream [TripMD syntax reference](https://github.com/cumuloworks/itinerary-md#syntax).
 
 ## Keep personal plans in separate repositories
 
@@ -86,12 +86,12 @@ When the Markdown changes on GitHub, the same shared viewer URL shows the update
 For example, all of these routes can point to the same file:
 
 ```text
-/yuitof/china-travel-2026
-/yuitof/china-travel-2026/travel-plan
-/yuitof
+/octocat/lisbon-weekend
+/octocat/lisbon-weekend/plaintrip
+/octocat
 ```
 
-No filename is special. Each URL exists only when `route.yaml` maps it.
+`plaintrip.md` is the default convention, not a hardcoded requirement. Each URL exists only when `route.yaml` maps it.
 
 ## Configure routes
 
@@ -101,36 +101,36 @@ Put `route.yaml` at the root of an itinerary repository:
 version: 1
 
 routes:
-  /: travel-plan.md
-  /travel-plan: travel-plan.md
+  /: plaintrip.md
+  /plaintrip: plaintrip.md
   /packing: notes/packing-list.md
-  /week-one: schedules/shanghai-and-wuhan.md
+  /food: notes/restaurants.md
 ```
 
-If this file is in `yuitof/china-travel-2026`, the viewer resolves:
+If this file is in `octocat/lisbon-weekend`, the viewer resolves:
 
 | Viewer URL path | Public GitHub file |
 | --- | --- |
-| `/yuitof/china-travel-2026` | `travel-plan.md` |
-| `/yuitof/china-travel-2026/travel-plan` | `travel-plan.md` |
-| `/yuitof/china-travel-2026/packing` | `notes/packing-list.md` |
+| `/octocat/lisbon-weekend` | `plaintrip.md` |
+| `/octocat/lisbon-weekend/plaintrip` | `plaintrip.md` |
+| `/octocat/lisbon-weekend/packing` | `notes/packing-list.md` |
 
 Routes are explicit. PlainTrip MD does not guess a default filename, extension, or folder index. It checks the repository's `main` branch and then `master`. GitHub responses are cached for about a minute.
 
 ### Add an owner home
 
-An owner-only URL such as `/yuitof` has no repository segment, so its routing lives in the GitHub profile repository `yuitof/yuitof`:
+An owner-only URL such as `/octocat` has no repository segment, so its routing lives in the GitHub profile repository `octocat/octocat`:
 
 ```yaml
 version: 1
 
 routes:
   /:
-    repository: china-travel-2026
-    file: travel-plan.md
+    repository: lisbon-weekend
+    file: plaintrip.md
 ```
 
-This maps `/yuitof` to `yuitof/china-travel-2026/travel-plan.md`. Owner-home targets stay inside the same GitHub account.
+This maps `/octocat` to `octocat/lisbon-weekend/plaintrip.md`. Owner-home targets stay inside the same GitHub account.
 
 This is routing, not access control. Every source file remains readable in its public GitHub repository. Never commit passport numbers, booking codes, home addresses, API keys, or other secrets. Private repositories are not supported yet.
 
@@ -159,7 +159,7 @@ The ready-to-clone [`yuitof/plaintrip-md-template`](https://github.com/yuitof/pl
 
 ```text
 route.yaml
-travel-plan.md
+plaintrip.md
 README.md
 ```
 

@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import type { PhrasingContent, Root, RootContent } from "mdast";
 import remarkGfm from "remark-gfm";
 import remarkItinerary from "remark-itinerary";
@@ -188,8 +187,4 @@ export function parseItinerary(source: string): ParsedItinerary {
     },
     root,
   };
-}
-
-export function getSampleItinerarySource(): string {
-  return fs.readFileSync("sample-travel-plan.md", "utf8");
 }

@@ -22,8 +22,8 @@ timezone: Asia/Tokyo
 const config = `
 version: 1
 routes:
-  /: plans/china.md
-  /travel-plan: plans/china.md
+  /: plaintrip.md
+  /plaintrip: plaintrip.md
   /packing: notes/packing.md
   /folder/nested: another-name.md
 `;
@@ -33,7 +33,7 @@ version: 1
 routes:
   /:
     repository: a-trip
-    file: plans/china.md
+    file: plaintrip.md
 `;
 
 const oldConfig = `
@@ -46,7 +46,7 @@ function responseFor(url: string): Response {
   const path = new URL(url).pathname;
   const files: Record<string, string> = {
     "/someone/a-trip/main/route.yaml": config,
-    "/someone/a-trip/main/plans/china.md": plan,
+    "/someone/a-trip/main/plaintrip.md": plan,
     "/someone/a-trip/main/notes/packing.md": plan,
     "/someone/a-trip/main/another-name.md": plan,
     "/someone/someone/main/route.yaml": homeConfig,
@@ -66,13 +66,13 @@ test("explicit GitHub routes, owner homes, aliases, and branches", async () => {
     const root = await loadGitHubTrip("someone", "a-trip");
     assert.equal(root.status, "ok");
     if (root.status === "ok") {
-      assert.equal(root.filePath, "plans/china.md");
+      assert.equal(root.filePath, "plaintrip.md");
       assert.match(root.source, /type: tripmd/);
     }
 
-    const alias = await loadGitHubTrip("someone", "a-trip", ["travel-plan"]);
+    const alias = await loadGitHubTrip("someone", "a-trip", ["plaintrip"]);
     assert.equal(alias.status, "ok");
-    if (alias.status === "ok") assert.equal(alias.filePath, "plans/china.md");
+    if (alias.status === "ok") assert.equal(alias.filePath, "plaintrip.md");
 
     const packing = await loadGitHubTrip("someone", "a-trip", ["packing"]);
     assert.equal(packing.status, "ok");
@@ -86,7 +86,7 @@ test("explicit GitHub routes, owner homes, aliases, and branches", async () => {
     assert.equal(home.status, "ok");
     if (home.status === "ok") {
       assert.equal(home.repository, "a-trip");
-      assert.equal(home.filePath, "plans/china.md");
+      assert.equal(home.filePath, "plaintrip.md");
     }
 
     const missing = await loadGitHubTrip("someone", "a-trip", ["missing"]);

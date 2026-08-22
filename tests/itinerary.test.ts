@@ -1,22 +1,45 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import test from "node:test";
 import { Parser } from "expr-eval";
 import { parseItinerary, type ItineraryEventNode } from "../lib/itinerary.ts";
 
-test("the bundled plan uses TripMD headings, events, alerts, and frontmatter", () => {
-  const parsed = parseItinerary(readFileSync("sample-travel-plan.md", "utf8"));
+test("TripMD documents use itinerary headings, events, alerts, and frontmatter", () => {
+  const parsed = parseItinerary(`---
+type: tripmd
+title: Example weekend
+description: A neutral test itinerary.
+tags: [Example, Friends]
+budget: 500 EUR
+currency: EUR
+timezone: Europe/Lisbon
+updated: 2027-05-01
+---
+
+## Before you go
+
+- [ ] Pack
+
+## 2027-05-14 @Europe/Lisbon
+
+> [10:00] - [10:45] train Airport metro :: Airport - City centre
+>
+> - price: 2 EUR
+
+> [!NOTE] Example
+>
+> Replace this itinerary with your own.
+`);
   const counts = parsed.root.children.reduce<Record<string, number>>((result, node) => {
     result[node.type] = (result[node.type] ?? 0) + 1;
     return result;
   }, {});
 
   assert.equal(parsed.frontmatter.type, "tripmd");
-  assert.equal(parsed.frontmatter.title, "China trip · 2026");
-  assert.deepEqual(parsed.frontmatter.tags, ["China", "Friends", "2026"]);
-  assert.equal(parsed.frontmatter.updated, "2026-08-22");
-  assert.equal(counts.itmdHeading, 16);
-  assert.equal(counts.itmdEvent, 47);
+  assert.equal(parsed.frontmatter.title, "Example weekend");
+  assert.deepEqual(parsed.frontmatter.tags, ["Example", "Friends"]);
+  assert.equal(parsed.frontmatter.updated, "2027-05-01");
+  assert.equal(counts.itmdHeading, 1);
+  assert.equal(counts.itmdEvent, 1);
   assert.equal(counts.itmdAlert, 1);
 });
 
