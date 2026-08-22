@@ -1,7 +1,8 @@
 ---
 type: tripmd
 title: China trip · 2026
-description: Tokyo → Shanghai → Wuhan → Shenzhen → Hong Kong → Zhuhai → Macau → Ganzhou → Hong Kong → Tokyo
+description: Shared planning copy. Times are local to the place shown; booked items and open decisions are tagged.
+route: Tokyo → Shanghai → Wuhan → Shenzhen → Hong Kong → Zhuhai → Macau → Ganzhou → Hong Kong → Tokyo
 budget: 150,000 JPY
 currency: JPY
 timezone: Asia/Shanghai

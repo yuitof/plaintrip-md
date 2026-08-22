@@ -1,5 +1,4 @@
 import fs from "node:fs";
-import path from "node:path";
 
 export type TripEvent = {
   time: string;
@@ -24,6 +23,7 @@ export type IdeaGroup = {
 export type TripPlan = {
   title: string;
   description: string;
+  route: string[];
   budget: string;
   updated: string;
   checklist: string[];
@@ -119,14 +119,16 @@ function parseIdeaGroups(source: string): IdeaGroup[] {
     .filter((group) => group.title && group.ideas.length);
 }
 
-export function getTripPlan(): TripPlan {
-  const file = path.join(process.cwd(), "travel-plan.md");
-  const source = fs.readFileSync(file, "utf8");
+export function parseTripPlan(source: string): TripPlan {
   const meta = readFrontmatter(source);
 
   return {
     title: meta.title ?? "China trip · 2026",
     description: meta.description ?? "",
+    route: (meta.route ?? "")
+      .split("→")
+      .map(cleanInline)
+      .filter(Boolean),
     budget: meta.budget ?? "150,000 JPY",
     updated: meta.updated ?? "",
     checklist: listItems(section(source, "Before you go", "Itinerary")),
@@ -134,4 +136,8 @@ export function getTripPlan(): TripPlan {
     ideas: parseIdeaGroups(section(source, "Ideas to discuss", "Practical notes")),
     practicalNotes: listItems(section(source, "Practical notes")),
   };
+}
+
+export function getSampleTripPlan(): TripPlan {
+  return parseTripPlan(fs.readFileSync("sample-travel-plan.md", "utf8"));
 }

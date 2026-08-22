@@ -1,19 +1,23 @@
 {
-  "name": "china-trip-2026",
+  "name": "travel-plan-viewer",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "vinext build",
-    "postbuild": "node scripts/copy-hosting-metadata.mjs",
+    "build": "node scripts/build.mjs",
+    "build:next": "next build",
+    "build:sites": "node scripts/build.mjs --sites",
     "start": "vinext start",
-    "check": "tsc --noEmit"
+    "start:next": "next start",
+    "check": "tsc --noEmit",
+    "test": "node --test tests/*.test.ts"
   },
   "dependencies": {
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@types/node": "latest",
