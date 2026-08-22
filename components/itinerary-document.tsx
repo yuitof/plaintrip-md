@@ -59,17 +59,19 @@ import type {
 } from "mdast";
 import { toString as mdastToString } from "mdast-util-to-string";
 import {
-  parseItinerary,
   type ItineraryAlertNode,
   type ItineraryEventNode,
   type ItineraryFrontmatter,
   type ItineraryHeadingNode,
   type ItineraryNode,
+  type ItineraryPriceInfo,
+  type ParsedItinerary,
 } from "@/lib/itinerary";
 
 type RenderContext = {
   currency: string;
   timezone?: string;
+  timezoneOverride?: string;
 };
 
 const eventIcons: Record<string, LucideIcon> = {
@@ -250,20 +252,61 @@ function formatClockTime(
   return value.dayOffset ? `${clock} +${value.dayOffset}` : clock;
 }
 
-function eventTimes(event: ItineraryEventNode, timezone?: string) {
+function dateInTimezone(iso: string, timezone: string): string | undefined {
+  try {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      timeZone: timezone,
+    }).formatToParts(new Date(iso));
+    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+    return values.year && values.month && values.day
+      ? `${values.year}-${values.month}-${values.day}`
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function formatTimeOverride(
+  iso: string | null | undefined,
+  timezone: string,
+  baseDate?: string,
+): string | undefined {
+  const time = formatTime(iso, timezone);
+  if (!time || !iso || !baseDate) return time;
+  const displayedDate = dateInTimezone(iso, timezone);
+  if (!displayedDate) return time;
+  const offset = Math.round(
+    (new Date(displayedDate).getTime() - new Date(baseDate).getTime()) /
+      86_400_000,
+  );
+  return offset ? `${time} ${offset > 0 ? "+" : ""}${offset}d` : time;
+}
+
+function eventTimes(event: ItineraryEventNode, context: RenderContext) {
   if (event.time?.kind === "marker") {
     return { start: event.time.marker.toUpperCase(), end: undefined };
   }
+  const override = context.timezoneOverride;
+  const baseDate = event.data?.itmdDate?.dateISO;
   if (event.time?.kind === "point") {
     return {
-      start: formatClockTime(event.time.start) ?? formatTime(event.time.startISO, timezone),
+      start: override
+        ? formatTimeOverride(event.time.startISO, override, baseDate)
+        : formatClockTime(event.time.start) ?? formatTime(event.time.startISO, context.timezone),
       end: undefined,
     };
   }
   if (event.time?.kind === "range") {
     return {
-      start: formatClockTime(event.time.start) ?? formatTime(event.time.startISO, timezone),
-      end: formatClockTime(event.time.end) ?? formatTime(event.time.endISO, timezone),
+      start: override
+        ? formatTimeOverride(event.time.startISO, override, baseDate)
+        : formatClockTime(event.time.start) ?? formatTime(event.time.startISO, context.timezone),
+      end: override
+        ? formatTimeOverride(event.time.endISO, override, baseDate)
+        : formatClockTime(event.time.end) ?? formatTime(event.time.endISO, context.timezone),
     };
   }
   return { start: undefined, end: undefined };
@@ -277,8 +320,27 @@ function labelFor(key: string): string {
     .join(" ");
 }
 
+function evaluatedPriceLabel(
+  priceInfo: ItineraryPriceInfo | undefined,
+): string | undefined {
+  if (!priceInfo?.raw.includes("{")) return undefined;
+  const totals = new Map<string, number>();
+  for (const token of priceInfo.price.tokens ?? []) {
+    if (token.kind !== "money") continue;
+    const currency = (token.normalized?.currency ?? token.currency)?.toUpperCase();
+    const amount = Number(token.normalized?.amount ?? token.amount);
+    if (!currency || !Number.isFinite(amount)) continue;
+    totals.set(currency, (totals.get(currency) ?? 0) + amount);
+  }
+  if (!totals.size) return undefined;
+  return [...totals.entries()]
+    .map(([currency, amount]) => formatMoney(amount, currency))
+    .join(" + ");
+}
+
 function EventBody({ event, accent }: { event: ItineraryEventNode; accent: string }) {
   if (!event.body?.length) return null;
+  let priceIndex = 0;
   return (
     <div className="event-body" style={{ borderColor: accent }}>
       {event.body.map((segment, index) => {
@@ -292,11 +354,17 @@ function EventBody({ event, accent }: { event: ItineraryEventNode; accent: strin
                 const normalizedKey = entry.key.toLowerCase().replaceAll("-", "");
                 const Icon = metadataIcons[normalizedKey] ?? Tag;
                 const isPrice = normalizedKey === "price" || normalizedKey === "cost";
+                const priceInfo = isPrice
+                  ? event.data?.itmdPrice?.[priceIndex++]
+                  : undefined;
+                const calculatedPrice = evaluatedPriceLabel(priceInfo);
                 return (
                   <span className={isPrice ? "price" : undefined} key={`${entry.key}-${entryIndex}`}>
                     <Icon aria-hidden="true" size={14} />
                     {!isPrice ? <b>{labelFor(entry.key)}:</b> : null}
-                    {renderInline(entry.value)}
+                    {calculatedPrice ? (
+                      <span title={`Calculated from ${priceInfo?.raw}`}>{calculatedPrice}</span>
+                    ) : renderInline(entry.value)}
                   </span>
                 );
               })}
@@ -317,8 +385,7 @@ function EventBody({ event, accent }: { event: ItineraryEventNode; accent: strin
 function EventBlock({ event, context }: { event: ItineraryEventNode; context: RenderContext }) {
   const Icon = eventIcons[event.eventType] ?? MapPin;
   const accent = accentFor(event);
-  const timezone = context.timezone;
-  const times = eventTimes(event, timezone);
+  const times = eventTimes(event, context);
   const destination = event.destination;
   const from = destination && destination.kind !== "single" ? destination.from : undefined;
   const to = destination && destination.kind !== "single" ? destination.to : undefined;
@@ -522,10 +589,19 @@ function tagColor(tag: string): CSSProperties {
   };
 }
 
-export default function ItineraryDocument({ source }: { source: string }) {
-  const parsed = parseItinerary(source);
-  const { frontmatter, root } = parsed;
-  const context = { currency: frontmatter.currency, timezone: frontmatter.timezone };
+export default function ItineraryDocument({
+  itinerary,
+  timezoneOverride,
+}: {
+  itinerary: ParsedItinerary;
+  timezoneOverride?: string;
+}) {
+  const { frontmatter, root } = itinerary;
+  const context = {
+    currency: frontmatter.currency,
+    timezone: timezoneOverride || frontmatter.timezone,
+    timezoneOverride,
+  };
 
   return (
     <main className="preview-shell">

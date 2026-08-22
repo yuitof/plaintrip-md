@@ -68,17 +68,23 @@ export type ItineraryEventNode = {
   > | null;
   data?: {
     hProperties?: Record<string, unknown>;
-    itmdPrice?: Array<{
-      key: string;
-      raw: string;
-      price: {
-        tokens?: Array<{
-          kind?: string;
-          currency?: string;
-          amount?: string;
-          normalized?: { currency?: string; amount?: string };
-        }>;
-      };
+    itmdDate?: {
+      dateISO?: string;
+      timezone?: string;
+    };
+    itmdPrice?: ItineraryPriceInfo[];
+  };
+};
+
+export type ItineraryPriceInfo = {
+  key: string;
+  raw: string;
+  price: {
+    tokens?: Array<{
+      kind?: string;
+      currency?: string;
+      amount?: string;
+      normalized?: { currency?: string; amount?: string };
     }>;
   };
 };

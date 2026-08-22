@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import ItineraryDocument from "@/components/itinerary-document";
+import ViewerChrome from "@/components/viewer-chrome";
 import { loadGitHubTrip } from "@/lib/github-plan";
 import { parseItinerary } from "@/lib/itinerary";
+import {
+  timezoneFromSearchParams,
+  type ViewerSearchParams,
+} from "@/lib/view-options";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +30,21 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Home() {
-  return <ItineraryDocument source={await loadTemplateSource()} />;
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<ViewerSearchParams>;
+}) {
+  const [source, query] = await Promise.all([
+    loadTemplateSource(),
+    searchParams,
+  ]);
+  return (
+    <ViewerChrome
+      source={source}
+      sourceLabel="yuitof/plaintrip-md-template/plaintrip.md"
+      sourceRepositoryUrl="https://github.com/yuitof/plaintrip-md-template"
+      timezoneOverride={timezoneFromSearchParams(query)}
+    />
+  );
 }

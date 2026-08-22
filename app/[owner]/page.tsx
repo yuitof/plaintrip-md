@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import ItineraryDocument from "@/components/itinerary-document";
+import ViewerChrome from "@/components/viewer-chrome";
 import { loadGitHubHome } from "@/lib/github-plan";
 import { parseItinerary } from "@/lib/itinerary";
+import {
+  timezoneFromSearchParams,
+  type ViewerSearchParams,
+} from "@/lib/view-options";
 
 export const dynamic = "force-dynamic";
 
 type PageProps = {
   params: Promise<{ owner: string }>;
+  searchParams: Promise<ViewerSearchParams>;
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -22,11 +27,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function GitHubHomePage({ params }: PageProps) {
-  const { owner } = await params;
+export default async function GitHubHomePage({ params, searchParams }: PageProps) {
+  const [{ owner }, query] = await Promise.all([params, searchParams]);
   const result = await loadGitHubHome(owner);
 
   if (result.status !== "ok") notFound();
 
-  return <ItineraryDocument source={result.source} />;
+  return (
+    <ViewerChrome
+      source={result.source}
+      sourceLabel={`${owner}/${result.repository}/${result.filePath}`}
+      sourceRepositoryUrl={result.repositoryUrl}
+      timezoneOverride={timezoneFromSearchParams(query)}
+    />
+  );
 }

@@ -5,7 +5,7 @@ export default function NotFound() {
       <h1>Itinerary not found</h1>
       <p>
         Check the GitHub owner, repository, page path, and the repository’s
-        <code> travel-plan.yml</code> access rules.
+        <code> route.yaml</code> mappings.
       </p>
       <a href="/">View the template itinerary</a>
     </main>

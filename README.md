@@ -21,6 +21,18 @@ npm run build
 
 `npm run build` creates a ChatGPT Sites-compatible build. On Vercel, the same command automatically selects the native Next.js build. You can also run either target explicitly with `npm run build:sites` or `npm run build:next`.
 
+## Preview controls
+
+The surrounding toolbar follows TripMD Studio's preview layout without including its editor:
+
+- **TZ** applies an IANA timezone override and stores it in the shared URL as `?tz=Area/City`.
+- **Device TZ** switches the preview to the browser's timezone.
+- **Cur** shows the itinerary's declared currency; PlainTrip MD does not pretend to provide live exchange rates.
+- **Source** opens the public itinerary repository.
+- **Copy Markdown** copies the source document, while **Share URL** uses the device share sheet or copies the current URL.
+
+The GitHub and information icons in the header link back to the PlainTrip MD project.
+
 ## Write an itinerary
 
 TripMD mode starts with `type: tripmd` in YAML frontmatter:
@@ -69,7 +81,7 @@ Use `## YYYY-MM-DD` for date headings. Add `@Area/City` when a day uses a differ
 - Common event types such as `flight`, `train`, `ferry`, `hotel`, `meeting`, `shopping`, and `sightseeing` receive matching timeline icons.
 - `:: Place` is a single location; `:: From - To` is a journey.
 - Indented blockquote list items add metadata such as `price`, `status`, `seat`, `duration`, and `details`.
-- Price values can use arithmetic such as `{25*4} USD`. PlainTrip MD evaluates arithmetic only—never variables or functions.
+- Price values can use arithmetic such as `{25*4} USD`. PlainTrip MD displays the calculated amount while evaluating numbers and arithmetic operators only—never variables or functions.
 - Normal Markdown, GFM tables, task lists, links, and `[!NOTE]`-style alerts remain available around the itinerary.
 
 See the complete [`plaintrip.md`](https://github.com/yuitof/plaintrip-md-template/blob/main/plaintrip.md) example and the upstream [TripMD syntax reference](https://github.com/cumuloworks/itinerary-md#syntax).
