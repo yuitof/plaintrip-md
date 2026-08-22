@@ -2,11 +2,12 @@
   "name": "china-trip-2026",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "postbuild": "node scripts/prepare-dist.mjs",
-    "start": "next start",
+    "build": "vinext build",
+    "postbuild": "node scripts/copy-hosting-metadata.mjs",
+    "start": "vinext start",
     "check": "tsc --noEmit"
   },
   "dependencies": {
@@ -18,6 +19,11 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "typescript": "latest"
+    "@vitejs/plugin-react": "^6.1.0",
+    "@vitejs/plugin-rsc": "^0.5.34",
+    "react-server-dom-webpack": "^19.2.8",
+    "typescript": "latest",
+    "vinext": "^1.0.0-beta.8",
+    "vite": "^8.2.2"
   }
 }
