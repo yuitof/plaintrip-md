@@ -11,7 +11,28 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:3000>. Before publishing, run:
+Open <http://localhost:3000>.
+
+To preview an itinerary folder before pushing it to GitHub, pass the folder to
+the development command:
+
+```sh
+npm run dev -- /path/to/itinerary-folder
+```
+
+For example:
+
+```sh
+npm run dev -- ~/Desktop/itinerary-china-2026
+```
+
+The folder must contain `route.yaml` (or `route.yml`) with a `/` route. Open
+<http://localhost:3000>; PlainTrip MD reads that route from disk and refreshes
+the preview whenever the route file or a Markdown file changes. This local mode
+is only active for that development process—normal development, builds, and
+deployments still load public GitHub repositories.
+
+Before publishing, run:
 
 ```sh
 npm run check
@@ -92,7 +113,7 @@ The cleanest setup uses two repositories:
 - deploy PlainTrip MD once as the viewer;
 - keep each itinerary and its `route.yaml` in a small public repository.
 
-When the Markdown changes on GitHub, the same shared viewer URL shows the update after its short cache expires. There is no new PDF and no viewer redeployment.
+When the Markdown changes on GitHub, the same shared viewer URL shows the update. There is no new PDF and no viewer redeployment.
 
 For example, all of these routes can point to the same file:
 
@@ -126,7 +147,7 @@ If this file is in `octocat/lisbon-weekend`, the viewer resolves:
 | `/octocat/lisbon-weekend/plaintrip` | `plaintrip.md` |
 | `/octocat/lisbon-weekend/packing` | `notes/packing-list.md` |
 
-Routes are explicit. PlainTrip MD does not guess a default filename, extension, or folder index. It checks the repository's `main` branch and then `master`. GitHub responses are cached for about a minute.
+Routes are explicit. PlainTrip MD does not guess a default filename, extension, or folder index. It checks the repository's `main` branch and then `master`. GitHub itinerary reads bypass the shared server cache so recently pushed changes appear immediately.
 
 ### Add an owner home
 

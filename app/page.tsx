@@ -4,6 +4,7 @@ import { cache } from "react";
 import ViewerChrome from "@/components/viewer-chrome";
 import { loadGitHubTrip } from "@/lib/github-plan";
 import { parseItinerary } from "@/lib/itinerary";
+import { loadLocalPreview } from "@/lib/local-preview";
 import {
   currencyFromSearchParams,
   type ViewerSearchParams,
@@ -14,14 +15,27 @@ export const dynamic = "force-dynamic";
 const TEMPLATE_OWNER = "yuitof";
 const TEMPLATE_REPOSITORY = "plaintrip-md-template";
 
-const loadTemplateSource = cache(async () => {
+const loadHomeSource = cache(async () => {
+  const local = await loadLocalPreview();
+  if (local) {
+    return {
+      source: local.source,
+      sourceLabel: `${local.folderName}/${local.filePath}`,
+      localPreviewVersion: local.version,
+    };
+  }
+
   const result = await loadGitHubTrip(TEMPLATE_OWNER, TEMPLATE_REPOSITORY);
   if (result.status !== "ok") notFound();
-  return result.source;
+  return {
+    source: result.source,
+    sourceLabel: "yuitof/plaintrip-md-template/plaintrip.md",
+    sourceRepositoryUrl: "https://github.com/yuitof/plaintrip-md-template",
+  };
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const itinerary = parseItinerary(await loadTemplateSource());
+  const itinerary = parseItinerary((await loadHomeSource()).source);
   return {
     title: itinerary.frontmatter.title,
     description:
@@ -35,15 +49,16 @@ export default async function Home({
 }: {
   searchParams: Promise<ViewerSearchParams>;
 }) {
-  const [source, query] = await Promise.all([
-    loadTemplateSource(),
+  const [homeSource, query] = await Promise.all([
+    loadHomeSource(),
     searchParams,
   ]);
   return (
     <ViewerChrome
-      source={source}
-      sourceLabel="yuitof/plaintrip-md-template/plaintrip.md"
-      sourceRepositoryUrl="https://github.com/yuitof/plaintrip-md-template"
+      source={homeSource.source}
+      sourceLabel={homeSource.sourceLabel}
+      sourceRepositoryUrl={homeSource.sourceRepositoryUrl}
+      localPreviewVersion={homeSource.localPreviewVersion}
       currencyOverride={currencyFromSearchParams(query)}
     />
   );

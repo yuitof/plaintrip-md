@@ -1,7 +1,8 @@
-import { ExternalLink, Info, PanelTop } from "lucide-react";
+import { ExternalLink, FileText, Info, PanelTop } from "lucide-react";
 import { cookies } from "next/headers";
 import { SiGithub } from "react-icons/si";
 import ItineraryDocument from "@/components/itinerary-document";
+import LocalPreviewRefresh from "@/components/local-preview-refresh";
 import {
   CurrencyControl,
   TimezoneReadout,
@@ -23,7 +24,8 @@ const VIEWER_REPOSITORY = "https://github.com/yuitof/plaintrip-md";
 type ViewerChromeProps = {
   source: string;
   sourceLabel: string;
-  sourceRepositoryUrl: string;
+  sourceRepositoryUrl?: string;
+  localPreviewVersion?: number;
   currencyOverride?: string;
 };
 
@@ -52,6 +54,7 @@ export default async function ViewerChrome({
   source,
   sourceLabel,
   sourceRepositoryUrl,
+  localPreviewVersion,
   currencyOverride,
 }: ViewerChromeProps) {
   const initialItinerary = parseItinerary(source);
@@ -87,6 +90,9 @@ export default async function ViewerChrome({
 
   return (
     <div className="viewer-app">
+      {localPreviewVersion === undefined ? null : (
+        <LocalPreviewRefresh version={localPreviewVersion} />
+      )}
       <header className="viewer-header">
         <a className="viewer-brand" href="/" aria-label="PlainTrip MD home">
           <strong>PlainTrip</strong>
@@ -126,17 +132,27 @@ export default async function ViewerChrome({
           <span className="sr-only">Read-only preview</span>
         </div>
         <div className="toolbar-spacer" />
-        <a
-          className="toolbar-button source-button"
-          href={sourceRepositoryUrl}
-          rel="noreferrer"
-          target="_blank"
-          title={`Open ${sourceLabel} on GitHub`}
-        >
-          <SiGithub aria-hidden="true" size={14} />
-          <span>{sourceLabel}</span>
-          <ExternalLink aria-hidden="true" size={12} />
-        </a>
+        {sourceRepositoryUrl ? (
+          <a
+            className="toolbar-button source-button"
+            href={sourceRepositoryUrl}
+            rel="noreferrer"
+            target="_blank"
+            title={`Open ${sourceLabel} on GitHub`}
+          >
+            <SiGithub aria-hidden="true" size={14} />
+            <span>{sourceLabel}</span>
+            <ExternalLink aria-hidden="true" size={12} />
+          </a>
+        ) : (
+          <span
+            className="toolbar-button source-button"
+            title={`Local source: ${sourceLabel}`}
+          >
+            <FileText aria-hidden="true" size={14} />
+            <span>{sourceLabel}</span>
+          </span>
+        )}
         <ViewerActions />
       </div>
 
