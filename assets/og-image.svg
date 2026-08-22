@@ -1,18 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#f8f9fb"/>
+  <rect width="1200" height="630" fill="#155dfc"/>
 
-  <g fill="#dfe7f8">
-    <rect x="-217" y="144" width="255" height="342" rx="96"/>
-    <rect x="127" y="144" width="255" height="342" rx="96"/>
-    <rect x="472" y="144" width="255" height="342" rx="96"/>
-    <rect x="817" y="144" width="255" height="342" rx="96"/>
-    <rect x="1162" y="144" width="255" height="342" rx="96"/>
+  <rect x="58" y="58" width="514" height="514" rx="116" fill="#ffffff" opacity=".09"/>
+  <g transform="translate(75 75) scale(15)">
+    <path d="M9 23V10.5C9 9.67 9.67 9 10.5 9H16a5 5 0 0 1 0 10H9" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="22.5" cy="23" r="2" fill="#ffffff"/>
   </g>
 
-  <g fill="#155dfc" font-family="Inter, 'Segoe UI', Arial, sans-serif">
-    <text x="0" y="354" font-size="235" letter-spacing="-9" transform="translate(75 -14) scale(.7 .96)">
-      <tspan font-weight="500">[</tspan><tspan font-weight="800">PlainTripMD</tspan><tspan font-weight="500">]</tspan>
+  <g fill="#ffffff" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+    <text x="545" y="298" font-size="90" letter-spacing="-4">
+      <tspan font-weight="800">PlainTrip</tspan><tspan dx="12" font-weight="400">MD</tspan>
     </text>
-    <text x="80" y="473" font-size="100" font-weight="750" letter-spacing="-4">plaintrip.md</text>
+    <text x="551" y="359" font-size="26" font-weight="500" letter-spacing=".4" opacity=".8">MARKDOWN ITINERARIES · READ ONLY</text>
   </g>
 </svg>
