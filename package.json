@@ -1,5 +1,5 @@
 {
-  "name": "travel-plan-viewer",
+  "name": "plaintrip-md",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -14,10 +14,22 @@
     "test": "node --test tests/*.test.ts"
   },
   "dependencies": {
+    "@types/mdast": "^4.0.4",
+    "expr-eval": "file:vendor/safe-expr-eval",
+    "lucide-react": "^0.542.0",
+    "mdast-util-to-string": "^4.0.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "remark-gfm": "^4.0.1",
+    "remark-itinerary": "^0.3.2",
+    "remark-itinerary-alert": "^0.2.2",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5",
     "yaml": "^2.9.0"
+  },
+  "overrides": {
+    "expr-eval": "$expr-eval"
   },
   "devDependencies": {
     "@types/node": "latest",

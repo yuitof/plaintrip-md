@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import TripDocument from "@/components/trip-document";
-import { getSampleTripPlan } from "@/lib/plan";
+import ItineraryDocument from "@/components/itinerary-document";
+import { getSampleItinerarySource } from "@/lib/itinerary";
 
 export const dynamic = "force-static";
 export const metadata: Metadata = {
@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <TripDocument plan={getSampleTripPlan()} />;
+  return <ItineraryDocument source={getSampleItinerarySource()} />;
 }

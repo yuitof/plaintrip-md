@@ -1,5 +1,4 @@
 import { parse as parseYaml } from "yaml";
-import { parseTripPlan, type TripPlan } from "./plan.ts";
 
 const RAW_GITHUB = "https://raw.githubusercontent.com";
 const ROUTE_FILES = ["route.yaml", "route.yml"];
@@ -22,7 +21,7 @@ type LocatedConfig = {
 export type RemoteTripResult =
   | {
       status: "ok";
-      plan: TripPlan;
+      source: string;
       branch: string;
       repository: string;
       filePath: string;
@@ -150,9 +149,11 @@ async function fetchTarget(
     const response = await readText(rawUrl(owner, target.repository, branch, target.filePath));
     if (!response) return { status: "upstream-error" };
     if (response.ok) {
+      const source = await response.text();
+      if (source.length > 1_000_000) return { status: "invalid" };
       return {
         status: "ok",
-        plan: parseTripPlan(await response.text()),
+        source,
         branch,
         repository: target.repository,
         filePath: target.filePath,

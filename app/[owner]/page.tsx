@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import TripDocument from "@/components/trip-document";
+import ItineraryDocument from "@/components/itinerary-document";
 import { loadGitHubHome } from "@/lib/github-plan";
+import { parseItinerary } from "@/lib/itinerary";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const result = await loadGitHubHome(owner);
 
   if (result.status !== "ok") return { title: "Trip not found" };
+  const itinerary = parseItinerary(result.source);
   return {
-    title: result.plan.title,
-    description: result.plan.description || `Itinerary shared by ${owner}`,
+    title: itinerary.frontmatter.title,
+    description: itinerary.frontmatter.description || `Itinerary shared by ${owner}`,
   };
 }
 
@@ -26,11 +28,5 @@ export default async function GitHubHomePage({ params }: PageProps) {
 
   if (result.status !== "ok") notFound();
 
-  return (
-    <TripDocument
-      plan={result.plan}
-      breadcrumb={owner}
-      sourceLabel={`${result.repository}/${result.filePath}`}
-    />
-  );
+  return <ItineraryDocument source={result.source} />;
 }

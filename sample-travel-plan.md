@@ -2,16 +2,15 @@
 type: tripmd
 title: China trip · 2026
 description: Shared planning copy. Times are local to the place shown; booked items and open decisions are tagged.
-route: Tokyo → Shanghai → Wuhan → Shenzhen → Hong Kong → Zhuhai → Macau → Ganzhou → Hong Kong → Tokyo
-budget: 150,000 JPY
+tags:
+  - China
+  - Friends
+  - 2026
+budget: 150000 JPY
 currency: JPY
 timezone: Asia/Shanghai
 updated: 2026-08-22
 ---
-
-# China trip · 28 August–12 September 2026
-
-This is the shared planning copy. Times are local to the place shown. Items marked **Booked** come from an existing reservation; items marked **Confirm** still need a time, terminal, ticket, or hotel check.
 
 ## Before you go
 
@@ -30,177 +29,318 @@ This is the shared planning copy. Times are local to the place shown. Items mark
 - [ ] Pack a Type G plug adapter for Hong Kong and Macau.
 - [ ] Keep the passport handy for every hotel, train, and border crossing.
 
-## Itinerary
+## 2026-08-28 @Asia/Tokyo
 
-### Friday 28 August · Tokyo → Haneda
-`2026-08-28` · Japan Standard Time
+> [19:00] - [22:30] dinner Dinner with ALLd. colleagues
+>
+> - details: Company dinner
+> - status: Planned
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| 19:00–22:30 | Dinner with ALLd. colleagues | Company dinner | Planned |
-| 22:59–23:52 | Shibuya → Haneda Airport | JR to Hamamatsucho, then Tokyo Monorail; use the confirmed international terminal, not Terminal 1 | Confirm |
+> [22:59] - [23:52] train JR and Tokyo Monorail :: Shibuya - Haneda Airport
+>
+> - details: Use the confirmed international terminal, not Terminal 1
+> - status: Confirm
 
-### Saturday 29 August · Tokyo → Shanghai
-`2026-08-29` · Japan time for departure; China Standard Time after arrival
+## 2026-08-29 @Asia/Shanghai
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| 02:40 JST–05:00 CST | Flight MM877 · HND → PVG | Peach; Standard; JPY 36,080; seat not assigned | Booked |
-| Morning | Meet Akashi-Ruri | Arrival-day plan; keep it gentle after the overnight flight | Planned |
-| Flexible | Buy essentials | Two sets of underwear, pajamas, and clothes for the next day | Flexible |
-| Afternoon | Check in to a Shanghai hostel | Property not selected yet | Confirm |
+> [02:40@Asia/Tokyo] - [05:00@Asia/Shanghai] flight MM877 :: Haneda Airport^HND - Shanghai Pudong Airport^PVG
+>
+> - airline: Peach
+> - class: Standard
+> - price: 36080 JPY
+> - seat: Not assigned
+> - status: Booked
 
-### Sunday 30 August · Shanghai or Hangzhou
-`2026-08-30` · China Standard Time
+> [am] meeting Meet Akashi-Ruri
+>
+> - details: Keep the arrival day gentle after the overnight flight
+> - status: Planned
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Full day | Choose one day plan | A proper Shanghai highlights day **or** a Hangzhou/West Lake day trip | Decide |
-| Optional | Try a robotaxi | Confirm the operator, visitor sign-up, pickup zone, and operating hours with a local friend | Idea |
-| Evening | Shanghai hostel | Property not selected yet | Confirm |
+> [] shopping Buy essentials
+>
+> - timing: Flexible
+> - details: Two sets of underwear, pajamas, and clothes for the next day
+> - status: Flexible
 
-### Monday 31 August · Shanghai with friends
-`2026-08-31` · China Standard Time
+> [pm] hostel Check in to a Shanghai hostel
+>
+> - details: Property not selected yet
+> - status: Confirm
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Morning | Meet 雷电芽衣的狗 | Meet-up | Planned |
-| Lunch | Hamburger place | The shop Mars recommended | Planned |
-| Afternoon | Anime and hobby shopping | 百联ZX创趣场 and 上海静安大悦城南座 | Planned |
-| Evening | Shanghai skyline option | The Bund or an observation deck if everyone still has energy | Idea |
+## 2026-08-30 @Asia/Shanghai
 
-### Tuesday 1 September · Shanghai → Wuhan
-`2026-09-01` · China Standard Time
+> [] sightseeing Choose one day plan
+>
+> - timing: Full day
+> - details: A proper Shanghai highlights day or a Hangzhou and West Lake day trip
+> - status: Decide
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Daytime | Spare day with friends | Meet 雷电芽衣的狗 and Akashi-Ruri; see Akashi off at the station | Flexible |
-| 20:38–06:41 +1 | Sleeper train G3318 · Shanghai South → Hankou | 10h 3m; second-class sleeper; JPY 6,449 | Booked |
-| Night | Sleep on the train | Keep an overnight bag easy to reach | Booked |
+> [] drive Try a robotaxi
+>
+> - timing: Optional
+> - details: Confirm visitor sign-up, pickup zone, and operating hours with a local friend
+> - status: Idea
 
-### Wednesday 2 September · Wuhan
-`2026-09-02` · China Standard Time
+> [pm] hostel Shanghai hostel
+>
+> - details: Property not selected yet
+> - status: Confirm
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Morning | Meet Echo | Meet-up after arriving at Hankou | Planned |
-| Flexible | Easy Wuhan afternoon | Choose something light after the sleeper train | Flexible |
-| Night | Stay at Echo's house | Register non-hotel accommodation within 24 hours | Planned |
+## 2026-08-31 @Asia/Shanghai
 
-### Thursday 3 September · Wuhan
-`2026-09-03` · China Standard Time
+> [am] meeting Meet 雷电芽衣的狗
+>
+> - status: Planned
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Full day | Wuhan day with Echo | Museum/East Lake or Yellow Crane Tower/riverfront route | Decide |
-| Night | Stay at Echo's house | — | Planned |
+> [] lunch Hamburger place
+>
+> - timing: Lunch
+> - details: The shop Mars recommended
+> - status: Planned
 
-### Friday 4 September · Wuhan → Shenzhen
-`2026-09-04` · China Standard Time
+> [pm] shopping Anime and hobby shopping :: 百联ZX创趣场 and 上海静安大悦城南座
+>
+> - status: Planned
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Morning | Train · Wuhan → Shenzhen | Train number and time not chosen | Confirm |
-| Flexible | Meet or pick up William | If this does not work, meet on 5 or 6 September instead | Flexible |
-| Afternoon | Huaqiangbei electronics district | Allow a few focused hours rather than trying to see every market | Planned |
-| Night | Tenz / Luxury Spa Shenzhen | Confirm the exact property and booking | Confirm |
+> [pm] sightseeing Shanghai skyline option :: The Bund
+>
+> - details: Try an observation deck if everyone still has energy
+> - status: Idea
 
-**Branch:** if William can join on 4 September, stay in Shenzhen and travel to Hong Kong together. Otherwise, the group can go to Hong Kong first and meet him later.
+## 2026-09-01 @Asia/Shanghai
 
-### Saturday 5 September · Shenzhen → Hong Kong
-`2026-09-05` · China Standard Time / Hong Kong Time
+> [] meeting Spare day with friends
+>
+> - timing: Daytime
+> - details: Meet 雷电芽衣的狗 and Akashi-Ruri; see Akashi off at the station
+> - status: Flexible
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Flexible | William may still join | Confirm in the group chat | Flexible |
-| Afternoon | Train · Shenzhen → Hong Kong | Choose the station and train after the William decision | Confirm |
-| Night | Hong Kong hotel | Not booked yet | Confirm |
+> [20:38] - [06:41+1] train G3318 :: Shanghai South - Hankou
+>
+> - class: Second-class sleeper
+> - duration: 10h 3m
+> - price: 6449 JPY
+> - status: Booked
 
-### Sunday 6 September · Hong Kong
-`2026-09-06` · Hong Kong Time
+> [pm] activity Sleep on the train
+>
+> - details: Keep an overnight bag easy to reach
+> - status: Booked
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Full day | Hong Kong day | Peak/old neighbourhoods or harbour/Kowloon route | Decide |
-| Evening | Star Ferry and harbour | A compact sunset/night option if the weather is clear | Idea |
-| Night | Hong Kong hotel | Not booked yet | Confirm |
+## 2026-09-02 @Asia/Shanghai
 
-### Monday 7 September · Hong Kong → Zhuhai → Macau
-`2026-09-07` · Hong Kong / China Standard Time
+> [am] meeting Meet Echo :: Hankou
+>
+> - details: Meet after arriving on the sleeper train
+> - status: Planned
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Morning | See William off | He can leave earlier if needed | Flexible |
-| Morning | Ferry · Hong Kong → Zhuhai | Confirm terminal, sailing, baggage rules, and check-in cutoff | Confirm |
-| Midday | One compact Zhuhai stop | Keep this short if Macau is the priority | Decide |
-| Afternoon | Zhuhai → Macau | Recommended planning assumption: cross at Gongbei / Border Gate | Confirm |
-| Night | Macau hotel | Not booked yet | Confirm |
+> [] activity Easy Wuhan afternoon
+>
+> - timing: Flexible
+> - details: Choose something light after the sleeper train
+> - status: Flexible
 
-### Tuesday 8 September · Macau → Ganzhou
-`2026-09-08` · China Standard Time
+> [pm] stay Echo's house
+>
+> - note: Register non-hotel accommodation within 24 hours
+> - status: Planned
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Morning | Macau → Gongbei → Zhuhai Station | Cross the border first; Zhuhai Station is beside Gongbei Port | Confirm |
-| Daytime | Train · Zhuhai → Ganzhou | Search from Zhuhai in Railway 12306 after fixing the border-crossing time; leave a safe transfer margin if required | Confirm |
-| Night | Stay in Ganzhou | Property not listed | Confirm |
+## 2026-09-03 @Asia/Shanghai
 
-### Wednesday 9 September · Ganzhou
-`2026-09-09` · China Standard Time
+> [] sightseeing Wuhan day with Echo
+>
+> - timing: Full day
+> - details: Museum and East Lake or Yellow Crane Tower and the riverfront
+> - status: Decide
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Full day | Ganzhou with Echo | Old city wall, pontoon bridge, Yugu Terrace, and Song City area | Idea |
-| Night | Stay in Ganzhou | Property not listed | Confirm |
+> [pm] stay Echo's house
+>
+> - status: Planned
 
-### Thursday 10 September · Ganzhou → Hong Kong
-`2026-09-10` · China Standard Time / Hong Kong Time
+## 2026-09-04 @Asia/Shanghai
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Daytime | See Echo off | Timing flexible | Flexible |
-| Suggested 19:32–21:56 | Direct train G901 · Ganzhou West → Hong Kong West Kowloon | Current timetable option; verify and book for 10 September | Confirm |
-| Night | Hong Kong hotel | Not booked yet | Confirm |
+> [am] train Wuhan to Shenzhen :: Wuhan - Shenzhen
+>
+> - details: Train number and time not chosen
+> - status: Confirm
 
-### Friday 11 September · Hong Kong → Tokyo
-`2026-09-11` · Hong Kong Time for departure; Japan Standard Time after arrival
+> [] meeting Meet or pick up William
+>
+> - timing: Flexible
+> - details: If this does not work, meet on 5 or 6 September instead
+> - status: Flexible
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Daytime | Final Hong Kong buffer | Keep luggage storage and airport travel time in mind | Flexible |
-| Confirm booking | Flight UO624 · HKG → HND | HK Express; HKD 1,116; exact times still need to be copied from the ticket | Booked |
+> [pm] shopping Huaqiangbei electronics district
+>
+> - details: Allow a few focused hours rather than trying to see every market
+> - status: Planned
 
-### Saturday 12 September · Tokyo
-`2026-09-12` · Japan Standard Time
+> [pm] spa Tenz or Luxury Spa Shenzhen
+>
+> - details: Confirm the exact property and booking
+> - status: Confirm
 
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| Early morning | Arrive at Haneda | Arrival date depends on the confirmed UO624 schedule | Confirm |
+> [!NOTE] Route branch
+>
+> If William can join on 4 September, stay in Shenzhen and travel to Hong Kong together. Otherwise, the group can go to Hong Kong first and meet him later.
+
+## 2026-09-05 @Asia/Hong_Kong
+
+> [] meeting William may still join
+>
+> - timing: Flexible
+> - details: Confirm in the group chat
+> - status: Flexible
+
+> [pm] train Shenzhen to Hong Kong :: Shenzhen - Hong Kong
+>
+> - details: Choose the station and train after the William decision
+> - status: Confirm
+
+> [pm] hotel Hong Kong hotel
+>
+> - details: Not booked yet
+> - status: Confirm
+
+## 2026-09-06 @Asia/Hong_Kong
+
+> [] sightseeing Hong Kong day
+>
+> - timing: Full day
+> - details: Peak and old neighbourhoods or harbour and Kowloon
+> - status: Decide
+
+> [pm] ferry Star Ferry and harbour
+>
+> - details: A compact sunset or night option if the weather is clear
+> - status: Idea
+
+> [pm] hotel Hong Kong hotel
+>
+> - details: Not booked yet
+> - status: Confirm
+
+## 2026-09-07 @Asia/Hong_Kong
+
+> [am] meeting See William off
+>
+> - details: He can leave earlier if needed
+> - status: Flexible
+
+> [am] ferry Hong Kong to Zhuhai :: Hong Kong - Zhuhai
+>
+> - details: Confirm terminal, sailing, baggage rules, and check-in cutoff
+> - status: Confirm
+
+> [] sightseeing One compact Zhuhai stop
+>
+> - timing: Midday
+> - details: Keep this short if Macau is the priority
+> - status: Decide
+
+> [pm] activity Cross from Zhuhai to Macau :: Gongbei Port - Border Gate
+>
+> - status: Confirm
+
+> [pm] hotel Macau hotel
+>
+> - details: Not booked yet
+> - status: Confirm
+
+## 2026-09-08 @Asia/Macau
+
+> [am] activity Cross to Zhuhai Station :: Macau - Gongbei Port
+>
+> - details: Zhuhai Station is beside Gongbei Port
+> - status: Confirm
+
+> [] train Zhuhai to Ganzhou :: Zhuhai - Ganzhou
+>
+> - timing: Daytime
+> - details: Search Railway 12306 after fixing the border-crossing time
+> - status: Confirm
+
+> [pm] hotel Stay in Ganzhou
+>
+> - details: Property not listed
+> - status: Confirm
+
+## 2026-09-09 @Asia/Shanghai
+
+> [] sightseeing Ganzhou with Echo
+>
+> - timing: Full day
+> - details: Old city wall, pontoon bridge, Yugu Terrace, and Song City area
+> - status: Idea
+
+> [pm] hotel Stay in Ganzhou
+>
+> - details: Property not listed
+> - status: Confirm
+
+## 2026-09-10 @Asia/Shanghai
+
+> [] meeting See Echo off
+>
+> - timing: Daytime
+> - status: Flexible
+
+> [19:32] - [21:56@Asia/Hong_Kong] train G901 :: Ganzhou West - Hong Kong West Kowloon
+>
+> - details: Current timetable option; verify and book for 10 September
+> - status: Confirm
+
+> [pm] hotel Hong Kong hotel
+>
+> - details: Not booked yet
+> - status: Confirm
+
+## 2026-09-11 @Asia/Hong_Kong
+
+> [] activity Final Hong Kong buffer
+>
+> - timing: Daytime
+> - details: Keep luggage storage and airport travel time in mind
+> - status: Flexible
+
+> [] flight UO624 :: Hong Kong International Airport^HKG - Haneda Airport^HND
+>
+> - airline: HK Express
+> - price: 1116 HKD
+> - details: Exact times still need to be copied from the ticket
+> - status: Booked
+
+## 2026-09-12 @Asia/Tokyo
+
+> [am] flight Arrive at Haneda :: Hong Kong International Airport^HKG - Haneda Airport^HND
+>
+> - details: Arrival date depends on the confirmed UO624 schedule
+> - status: Confirm
 
 ## Ideas to discuss
 
 ### Shanghai
 
-- **Classic Shanghai day:** old neighbourhood breakfast → Lujiazui / Shanghai Tower → ferry or metro to the Bund → Nanjing Road after dark.
+- **Classic Shanghai day:** old neighbourhood breakfast → Lujiazui and Shanghai Tower → ferry or metro to the Bund → Nanjing Road after dark.
 - **Hangzhou alternative:** reserve a full day for West Lake. The high-speed train itself is fast, but station transfers and the lake need the rest of the day.
 - **Anime shopping day:** 百联ZX创趣场 and 上海静安大悦城南座 already make a coherent friend-focused plan. Add only one skyline stop.
 - **Robotaxi:** possible operating areas include parts of Pudong and Jiading, but access is operator- and zone-specific. Treat it as a bonus, not an anchor reservation.
 
 ### Wuhan
 
-- **Culture + lake:** reserve Hubei Provincial Museum, then walk or cycle a manageable part of East Lake.
-- **City icon + evening:** Yellow Crane Tower, a Yangtze crossing, then Jianghan Road / the riverfront after dark.
+- **Culture and lake:** reserve Hubei Provincial Museum, then walk or cycle a manageable part of East Lake.
+- **City icon and evening:** Yellow Crane Tower, a Yangtze crossing, then Jianghan Road and the riverfront after dark.
 - After the overnight train, make 2 September the easier day and put the major sightseeing on 3 September.
 
 ### Shenzhen and Hong Kong
 
 - In Huaqiangbei, agree on a goal first: components, used devices, keyboards, drones, or just looking. The district can consume an entire day.
-- For one full Hong Kong day, a clean route is Central → Peak → Star Ferry → Tsim Sha Tsui waterfront → Jordan/Temple Street.
+- For one full Hong Kong day, a clean route is Central → Peak → Star Ferry → Tsim Sha Tsui waterfront → Jordan and Temple Street.
 - If the group wants more electronics and games after Huaqiangbei, substitute Sham Shui Po for the Peak rather than adding both.
 
 ### Zhuhai and Macau
 
-- Hong Kong → Zhuhai → Macau in one day is a transit-heavy day. Choose only one Zhuhai stop, then cross at Gongbei / Border Gate.
+- Hong Kong → Zhuhai → Macau in one day is a transit-heavy day. Choose only one Zhuhai stop, then cross at Gongbei and Border Gate.
 - In Macau, the compact first-time walk is Senado Square → St Dominic's → Ruins of St Paul's → Mount Fortress. Add Taipa only if arrival is early.
 
 ### Ganzhou
@@ -212,6 +352,6 @@ This is the shared planning copy. Times are local to the place shown. Items mark
 
 - **Private-home registration:** when staying at Echo's house in Hubei, the guest or host must register the accommodation within 24 hours. Hubei is included in the 2026 online-registration pilot.
 - **Hotels:** use the traveler's passport for accommodation registration. Do not rely on another person's Chinese residential ID as the travel document for the stay.
-- **Internet:** prepare roaming/eSIM access and offline copies of tickets, addresses, and friend contact details before entering mainland China.
+- **Internet:** prepare roaming or eSIM access and offline copies of tickets, addresses, and friend contact details before entering mainland China.
 - **Power:** mainland China commonly accepts two-flat-pin plugs, but Hong Kong and Macau use Type G. Carry one compact universal adapter.
 - **Privacy:** share the live site with the narrowest audience that works, and do not add home addresses, passport details, or booking codes.

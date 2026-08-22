@@ -3,35 +3,20 @@ import test from "node:test";
 import { loadGitHubHome, loadGitHubTrip } from "../lib/github-plan.ts";
 
 const plan = `---
+type: tripmd
 title: Test trip
 description: Loaded from the mock GitHub repository.
-route: Tokyo → Kyoto
-budget: 1 JPY
-updated: 2026-08-22
+tags: [Japan]
+budget: 1000 JPY
+currency: JPY
+timezone: Asia/Tokyo
 ---
 
-## Before you go
+## 2026-08-22 @Asia/Tokyo
 
-- [ ] Pack
-
-## Itinerary
-
-### One day
-\`2026-08-22\` · Japan Standard Time
-
-| Time | Plan | Details | Status |
-| --- | --- | --- | --- |
-| 09:00–10:00 | Test | A row | Planned |
-
-## Ideas to discuss
-
-### Ideas
-
-- One idea
-
-## Practical notes
-
-- One note
+> [09:00] - [10:00] train Test ride :: Tokyo - Kyoto
+>
+> - price: 100 JPY
 `;
 
 const config = `
@@ -80,7 +65,10 @@ test("explicit GitHub routes, owner homes, aliases, and branches", async () => {
   try {
     const root = await loadGitHubTrip("someone", "a-trip");
     assert.equal(root.status, "ok");
-    if (root.status === "ok") assert.equal(root.filePath, "plans/china.md");
+    if (root.status === "ok") {
+      assert.equal(root.filePath, "plans/china.md");
+      assert.match(root.source, /type: tripmd/);
+    }
 
     const alias = await loadGitHubTrip("someone", "a-trip", ["travel-plan"]);
     assert.equal(alias.status, "ok");
