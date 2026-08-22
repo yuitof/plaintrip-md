@@ -1,0 +1,1 @@
+PlainTrip MD interface showing a read-only Markdown itinerary preview with a compact timeline and sharing controls.

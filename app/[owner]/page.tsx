@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import ViewerChrome from "@/components/viewer-chrome";
 import { loadGitHubHome } from "@/lib/github-plan";
 import { parseItinerary } from "@/lib/itinerary";
+import { pageMetadata } from "@/lib/page-metadata";
 import {
   currencyFromSearchParams,
   type ViewerSearchParams,
@@ -21,10 +22,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (result.status !== "ok") return { title: "Trip not found" };
   const itinerary = parseItinerary(result.source);
-  return {
-    title: itinerary.frontmatter.title,
-    description: itinerary.frontmatter.description || `Itinerary shared by ${owner}`,
-  };
+  return pageMetadata(
+    itinerary.frontmatter.title,
+    itinerary.frontmatter.description || `Itinerary shared by ${owner}`,
+  );
 }
 
 export default async function GitHubHomePage({ params, searchParams }: PageProps) {

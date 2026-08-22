@@ -5,6 +5,7 @@ import ViewerChrome from "@/components/viewer-chrome";
 import { loadGitHubTrip } from "@/lib/github-plan";
 import { parseItinerary } from "@/lib/itinerary";
 import { loadLocalPreview } from "@/lib/local-preview";
+import { pageMetadata } from "@/lib/page-metadata";
 import {
   currencyFromSearchParams,
   type ViewerSearchParams,
@@ -36,12 +37,10 @@ const loadHomeSource = cache(async () => {
 
 export async function generateMetadata(): Promise<Metadata> {
   const itinerary = parseItinerary((await loadHomeSource()).source);
-  return {
-    title: itinerary.frontmatter.title,
-    description:
-      itinerary.frontmatter.description ||
-      "The PlainTrip MD itinerary template.",
-  };
+  return pageMetadata(
+    itinerary.frontmatter.title,
+    itinerary.frontmatter.description || "The PlainTrip MD itinerary template.",
+  );
 }
 
 export default async function Home({
