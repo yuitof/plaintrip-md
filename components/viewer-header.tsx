@@ -3,10 +3,10 @@ import { SiGithub } from "react-icons/si";
 
 export const VIEWER_REPOSITORY = "https://github.com/yuitof/plaintrip-md";
 
-export default function ViewerHeader() {
+export default function ViewerHeader({ homeHref = "/" }: { homeHref?: string }) {
   return (
     <header className="viewer-header">
-      <a className="viewer-brand" href="/" aria-label="PlainTrip MD home">
+      <a className="viewer-brand" href={homeHref} aria-label="PlainTrip MD home">
         <strong>PlainTrip</strong>
         <span>MD</span>
       </a>

@@ -72,8 +72,11 @@ export function formatCurrency(amount: number, currency: string): string {
 
 export async function loadExchangeRates(): Promise<ExchangeRates | undefined> {
   try {
+    const requestOptions = typeof window === "undefined"
+      ? { next: { revalidate: 43_200 } }
+      : { cache: "no-store" as const };
     const response = await fetch("https://open.er-api.com/v6/latest/USD", {
-      next: { revalidate: 43_200 },
+      ...requestOptions,
     });
     if (!response.ok) return undefined;
     const payload = (await response.json()) as {

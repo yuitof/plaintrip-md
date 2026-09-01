@@ -187,6 +187,34 @@ The local `.openai/hosting.json` identifies one particular Site and is ignored b
 
 Editing an itinerary repository does not require redeploying PlainTrip MD. See Vercel's [Next.js deployment guide](https://vercel.com/docs/frameworks/full-stack/nextjs).
 
+### GitHub Pages
+
+The `github-pages` branch includes a browser-only build that works without a
+server. It keeps the same `/OWNER/REPOSITORY/ROUTE` URLs by publishing the SPA
+entry point as both `index.html` and `404.html`.
+
+1. Push the `github-pages` branch to your repository.
+2. Open **Settings → Pages** and set **Source** to **GitHub Actions**.
+3. Run the **Deploy GitHub Pages** workflow, or push another commit to the
+   `github-pages` branch.
+4. Share the deployment URL followed by `/OWNER/REPOSITORY`.
+
+The workflow reads GitHub's configured Pages base path, so project sites such
+as `https://octocat.github.io/plaintrip-md/` and custom domains use the same
+build. You can test the artifact locally with:
+
+```bash
+npm run build:github-pages
+npm run preview:github-pages
+```
+
+GitHub Pages returns the SPA fallback with HTTP 404 for a direct visit to a
+previously unknown itinerary path, even though the viewer then loads that
+itinerary in the browser. Route-specific titles appear after loading, so link
+preview crawlers receive the generic PlainTrip MD metadata. Use ChatGPT Sites
+or Vercel when server-rendered social metadata or a successful HTTP status for
+every dynamic itinerary route is important.
+
 ## Make an itinerary template
 
 The ready-to-clone [`yuitof/plaintrip-md-template`](https://github.com/yuitof/plaintrip-md-template) contains only:

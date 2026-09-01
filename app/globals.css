@@ -767,6 +767,22 @@ button.toolbar-button { cursor: pointer; }
 
 .not-found-actions .not-found-primary:hover { background: #1447e6; }
 
+.pages-loading {
+  margin: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: .82rem;
+  font-weight: 500;
+}
+
+.pages-spinner { animation: pages-spin .8s linear infinite; }
+
+@keyframes pages-spin {
+  to { transform: rotate(360deg); }
+}
+
 @media (max-width: 640px) {
   .viewer-app { padding: 18px 10px 10px; gap: 10px; }
   .viewer-header { min-height: 36px; padding: 0 4px; }

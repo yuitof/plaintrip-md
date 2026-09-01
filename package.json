@@ -8,9 +8,11 @@
     "build": "node scripts/build.mjs",
     "build:next": "next build",
     "build:sites": "node scripts/build.mjs --sites",
+    "build:github-pages": "node scripts/build-github-pages.mjs",
     "start": "wrangler dev --config dist/server/wrangler.json",
     "start:sites": "wrangler dev --config dist/server/wrangler.json",
     "start:next": "next start",
+    "preview:github-pages": "vite preview --config vite.github-pages.config.ts",
     "check": "tsc --noEmit",
     "test": "node --test tests/*.test.ts"
   },

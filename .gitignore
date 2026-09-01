@@ -3,6 +3,7 @@ node_modules/
 next-env.d.ts
 dist/
 out/
+out-pages/
 .wrangler/
 .openai/hosting.json
 .DS_Store
